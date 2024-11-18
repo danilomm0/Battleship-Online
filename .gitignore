@@ -22,6 +22,5 @@ Thumbs.db
 .tags*
 .tags
 
-!*.gitkeep
 node_modules/
 .env
