@@ -35,56 +35,56 @@ body {
   border-radius: 10px;
 }
 
-.boards-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  margin-bottom: 2rem;
-}
-
-.board {
+.main {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 15px;
   padding: 1rem;
+  margin-bottom: 2rem;
 }
 
-.board-title {
+.game-message {
   text-align: center;
+  padding: 0.5rem;
   margin-bottom: 1rem;
-  color: #a8c0ff;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 2px;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 2px;
-  border-radius: 5px;
+.ship-placement {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex;
+  gap: 3rem;
 }
 
-.cell {
-  aspect-ratio: 1;
+.ships-list {
+  padding: 0.5rem 1rem;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 1rem;
 }
 
-.cell:hover {
-  background: rgba(255, 255, 255, 0.2);
+.ship {
+  fill: #a8c0ff;
+  cursor: move;
 }
 
-.cell.ship {
-  background: #4caf50;
+.ship.dragging {
+  opacity: 0;
 }
 
-.cell.hit {
-  background: #f44336;
+.ship.placed {
+  fill: #4caf50;
 }
 
-.cell.miss {
-  background: #607d8b;
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .button {
@@ -102,4 +102,70 @@ body {
 .button:hover {
   transform: scale(1.05);
   background: rgba(255, 255, 255, 0.2);
+}
+
+.board {
+  gap: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1rem;
+  margin: 1rem;
+}
+
+.board-title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.grid {
+  display: grid;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px;
+  border-radius: 5px;
+  backdrop-filter: blur(10px);
+}
+
+.cell {
+  fill: rgba(255, 255, 255, 0);
+  stroke: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.cell-hover {
+  fill: #a8c0ff;
+}
+
+.cell-invalid {
+  fill: rgba(244, 67, 54, 0.3);
+}
+
+.cell.hit {
+  background: #f44336;
+}
+
+.cell.miss {
+  background: #607d8b;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.gameOver {
+  display: none;
+  visibility: hidden;
+}
+
+#gameOver {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  border-radius: 15px;
+  padding: 3rem;
+  background: linear-gradient(135deg, #1a2a6c, #2a4858);
 }

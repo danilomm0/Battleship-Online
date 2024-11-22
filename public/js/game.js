@@ -12,6 +12,13 @@ const SHIPS = [
 let selectedShip = null;
 let isVertical = false;
 let placedShips = new Map();
+let gameState = {
+  difficulty: null,
+  playerBoard: null,
+  enemyBoard: null,
+  currentTurn: "player",
+  gameOver: false,
+};
 
 // Initialize the game board
 function createBoard(id) {
@@ -207,66 +214,29 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-let gameState = {
-  difficulty: null,
-  playerBoard: null,
-  enemyBoard: null,
-  currentTurn: "player",
-  gameOver: false,
-};
-
 function newAIGame(type) {
   if (type < 1 || type > 4) {
     console.log("Invalid difficulty level.");
     return null;
   }
-
-  gameState = {
-    difficulty: type,
-  };
+  sessionStorage.setItem("difficulty", JSON.stringify(type));
 
   // Redirect to the place ships page
-  window.location.href = "placeShips.html";
+  window.location.href = "game.html";
 }
 
 function start() {
   gameState.playerBoard = placedShips;
-  gameState.enemyBoard = placedShips;
-
-  console.log(gameState.playerBoard);
-  console.log(gameState.enemyBoard);
-
-  window.location.href = "game.html";
-
-  d3.select("#difficulty").text(DIFFICULTY[gameState.difficulty]);
-  d3.select("#enemyName").text(DIFFICULTY[gameState.difficulty] + " AI's");
-
-  createBoard("#playerBoard");
   createBoard("#enemyBoard");
 
-  sleep(10000).then(() => {
-    console.log("It made it to here");
-  });
+  d3.selectAll(".placeOnly").remove();
+  d3.selectAll(".hidden").classed("hidden", false);
 }
 
-function handleShot(event) {
-  // Implementation for handling player shots
+function menu() {
+  window.location.href = "index.html";
 }
 
-/////////////////////////////////////////////////////////////////
-// I do not know if we need these but they are here if we do
-/////////////////////////////////////////////////////////////////
-
-// Saves the current game state to local storage
-function saveGameState() {
-  localStorage.setItem("battleshipGame", JSON.stringify(gameState));
-}
-
-/**
- * Retrieves the game state from local storage
- * @returns {Object|null} Game state object or null if no saved state exists
- */
-function loadGameState() {
-  const savedState = localStorage.getItem("battleshipGame");
-  return savedState ? JSON.parse(savedState) : null;
+function gameOver() {
+  d3.select(".gameOver").classed("gameOver", false);
 }
