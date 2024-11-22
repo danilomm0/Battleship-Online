@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Battleship - Naval Combat Strategy Game</title>
+    <title>Battleship</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/d3.js"></script>
+    <script src="js/game.js"></script>
 </head>
 
 <body>
@@ -21,10 +23,14 @@
         <div class="mode-card">
             <h2 class="mode-title">Single Player</h2>
             <div class="button-container">
-                <button class="button" id="easy">Easy</button>
-                <button class="button" id="medium">Medium</button>
-                <button class="button" id="hard">Hard</button>
-                <button class="button" id="impossible">Impossible</button>
+                <button class="button" id="easy"
+                    onclick="newAIGame(1)">Easy</button>
+                <button class="button" id="medium"
+                    onclick="newAIGame(2)">Medium</button>
+                <button class="button" id="hard"
+                    onclick="newAIGame(3)">Hard</button>
+                <button class="button" id="impossible"
+                    onclick="newAIGame(4)">Impossible</button>
             </div>
         </div>
 
