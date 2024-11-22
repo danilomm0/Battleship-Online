@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <title>Draggable Image with Grid Snapping</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        svg {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <svg width="800" height="600"></svg>
+
+    <script>
+        // Set up the SVG canvas
+        const svg = d3.select("svg");
+
+        // Define the size of the grid
+        const gridSize = 60; // Each cell is 60x60 pixels
+        const numRows = 10;
+        const numCols = 10;
+
+        // Draw the grid on the SVG canvas
+        for (let i = 0; i <= numCols; i++) {
+            svg.append("line")
+                .attr("x1", i * gridSize)
+                .attr("y1", 0)
+                .attr("x2", i * gridSize)
+                .attr("y2", numRows * gridSize)
+                .attr("stroke", "#ddd");
+        }
+
+        for (let i = 0; i <= numRows; i++) {
+            svg.append("line")
+                .attr("x1", 0)
+                .attr("y1", i * gridSize)
+                .attr("x2", numCols * gridSize)
+                .attr("y2", i * gridSize)
+                .attr("stroke", "#ddd");
+        }
+
+        // Add an image to the SVG canvas
+        const image = svg.append("image")
+            .attr("x", 50)      // Initial x position
+            .attr("y", 50)      // Initial y position
+            .attr("width", 60)  // Width of the image
+            .attr("height", 60) // Height of the image
+            .attr("href", "yelPiece.png"); // Local image URL
+
+        let offsetX, offsetY;
+
+        // Define the drag behavior
+        const dragHandler = d3.drag()
+            .on("start", function (event) {
+                // Calculate the offset between the mouse position and the top-left corner of the image
+                const currentX = parseFloat(d3.select(this).attr("x"));
+                const currentY = parseFloat(d3.select(this).attr("y"));
+                offsetX = event.x - currentX;
+                offsetY = event.y - currentY;
+
+                // Optionally add a visual indication that the drag has started
+                d3.select(this).raise().attr("stroke", "black");
+            })
+            .on("drag", function (event) {
+                // Set the new position of the image based on the offset
+                d3.select(this)
+                    .attr("x", event.x - offsetX)
+                    .attr("y", event.y - offsetY);
+            })
+            .on("end", function (event) {
+                // Calculate the final coordinates to snap to the closest grid position
+                const currentX = event.x - offsetX;
+                const currentY = event.y - offsetY;
+
+                const snappedX = Math.round(currentX / gridSize) * gridSize;
+                const snappedY = Math.round(currentY / gridSize) * gridSize;
+
+                // Set the image's position to the snapped coordinates
+                d3.select(this)
+                    .attr("x", snappedX)
+                    .attr("y", snappedY)
+                    .attr("stroke", null);
+            });
+
+        // Apply the drag behavior to the image
+        dragHandler(image);
+    </script>
+</body>
+</html>

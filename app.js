@@ -1,14 +1,14 @@
 const express = require("express");
 const path = require("path");
-const apiRoutes = require("./routes/index.js");
+const routes = require("./routes/index.js");
 
 const app = express();
 
 // middlewear usage
-app.use(express.json());
+// app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// api routes
-app.use("/api", apiRoutes);
+// routes
+app.use("/", routes);
 
 module.exports = app;
