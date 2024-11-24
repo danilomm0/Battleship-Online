@@ -89,7 +89,7 @@ body {
 
 .button2 {
   border-radius: 25px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 196, 3, 0.1);
   border: 2px solid #a8c0ff;
   color: #a8c0ff;
 }
@@ -101,9 +101,20 @@ body {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-#login {
-  padding: 8px 24px;
+.button2 a {
+  color: #ffffff; 
+  text-decoration: none;
 }
+
+.button2 a:hover {
+  color: #4a90e2; 
+}
+
+
+#login {
+  padding: 12px 24px;
+}
+
 
 #easy {
   background: #4caf50;
