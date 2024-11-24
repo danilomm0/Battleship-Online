@@ -22,17 +22,24 @@
     <div class="game-modes">
         <div class="mode-card">
             <h2 class="mode-title">Single Player</h2>
-            <div class="button-container">
-                <button class="button" id="easy"
-                    onclick="sendReq(1)">Easy</button>
-                <button class="button" id="medium"
-                    onclick="sendReq(2)">Medium</button>
-                <button class="button" id="hard"
-                    onclick="sendReq(3)">Hard</button>
-                <button class="button" id="impossible"
-                    onclick="sendReq(4)">Impossible</button>
-            </div>
+            <form action="/place-ships" method="GET">
+                <input type="hidden" name="difficulty" value="1">
+                <button class="button" type="submit" id="easy">Easy</button>
+            </form>
+            <form action="/place-ships" method="GET">
+                <input type="hidden" name="difficulty" value="2">
+                <button class="button" type="submit" id="medium">Medium</button>
+            </form>
+            <form action="/place-ships" method="GET">
+                <input type="hidden" name="difficulty" value="3">
+                <button class="button" type="submit" id="hard">Hard</button>
+            </form>
+            <form action="/place-ships" method="GET">
+                <input type="hidden" name="difficulty" value="4">
+                <button class="button" type="submit" id="impossible">Impossible</button>
+            </form>
         </div>
+        
 
         <div class="mode-card">
             <h2 class="mode-title">Online Battle</h2>
