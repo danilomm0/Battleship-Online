@@ -37,32 +37,6 @@
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const savedState = localStorage.getItem("battleshipGame");
-            const parsedState = JSON.parse(savedState);
-
-            const reconstructedGameState = {
-                ...parsedState,
-                playerBoard: new Map(parsedState.playerBoard),
-                enemyBoard: new Map(parsedState.enemyBoard),
-            };
-
-            console.log(reconstructedGameState);
-            const gameState = reconstructedGameState;
-
-            if (gameState) {
-                console.log("Game state loaded:", gameState);
-                // Initialize boards or UI with the state
-                d3.select("#difficulty").text(DIFFICULTY[gameState.difficulty]);
-                createBoard("#playerBoard2");
-                createBoard("#enemyBoard2");
-                // console.log(gameState.playerBoard);
-            } else {
-                console.error("Game state is missing.");
-            }
-        });
-    </script>
 </body>
 
 </html>

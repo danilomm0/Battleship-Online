@@ -1,3 +1,5 @@
+const board = createBoard("#playerBoard");
+
 // Initialize ship dock
 const shipDock = d3
     .select("#ship-dock")
