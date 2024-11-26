@@ -11,6 +11,10 @@ router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/login.html'))
 });
 
+router.get('/help', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/help.html'))
+});
+
 // Serve the game page
 router.get('/place-ships', (req, res) => {
     const mode = req.query.difficulty;

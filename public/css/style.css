@@ -80,6 +80,8 @@ body {
   font-size: 18px;
   min-width: 120px;
   text-align: center;
+  cursor: pointer;                              
+  transition: all 0.3s ease;     
 }
 
 .button:hover {
@@ -92,6 +94,8 @@ body {
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid #a8c0ff;
   color: #a8c0ff;
+  cursor: pointer;                              
+  transition: all 0.3s ease;     
 }
 
 .button2:hover {
