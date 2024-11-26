@@ -1,3 +1,6 @@
+/**
+ * Store the difficulty which is grabbed from the current URL 
+ */
 function storeDifficulty() {
     // url params
     const urlParams = new URLSearchParams(window.location.search);
@@ -9,10 +12,40 @@ function storeDifficulty() {
 /**
  * Storing the playerBoard locally
  * 
- * @param {*} board the playerboard
+ * @param {String} type either pass boardPlayer or boardAI
+ * @param {Map} board the playerboard
  */
-function storeGameBoard(board) {
+function storeGameBoard(type, board) {
     // store board locally
-    localStorage.setItem('boardPlayer', JSON.stringify(Array.from(board)));
+    localStorage.setItem(type, JSON.stringify(Array.from(board)));
+}
+
+/**
+ * Getting current game difficulty from local storage
+ * 
+ * @returns Int -> the game difficulty
+ */
+function retrieveDifficulty() {
+    const difficulty = localStorage.getItem('gameDifficulty');
+    if (difficulty) {
+        return difficulty
+    }
+    console.error("Couldnt get the difficulty from local storage :( Returning max difficulty!")
+    return 4;
+}
+
+/**
+ * Retriving the game board from the local storage
+ * 
+ * @param {String} type pass either boardPlayer or boardAI
+ * @returns Map of the game board requested
+ */
+function retrieveGameBoard(type) {
+    const storedBoard = localStorage.getItem(type);
+    if (storedBoard) {
+        return new Map(JSON.parse(storedBoard));
+    }
+    console.error("Couldnt get board from local storage. :(");
+    return null;
 }
 

@@ -15,12 +15,6 @@ function start() {
     
     window.location.href = "game.html";
 
-    // d3.select("#difficulty").text(DIFFICULTY[gameState.difficulty]);
-    // d3.select("#enemyName").text(DIFFICULTY[gameState.difficulty] + " AI's");
-    // console.log(d3.select("#playerBoard2").node());
-    // createBoard("#playerBoard2");
-    // createBoard("#enemyBoard2");
-
 }
 
 function handleShot(event) {
