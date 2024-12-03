@@ -3,14 +3,10 @@ const app = require('./app'); // Import the Express app
 const dotenv = require('dotenv'); // For loading environment variables
 const connectDB = require('./config/database'); // MongoDB connection function
 
-// env for db vars
-// dotenv.config();
 
 // dbconnection
-// connectDB();
+connectDB();
 
-// port for env port stuff
-// const PORT = process.env.PORT || 5000;
 
 // Create an HTTP server
 const server = http.createServer(app);
