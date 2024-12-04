@@ -12,6 +12,10 @@ body {
   padding: 2rem;
 }
 
+a {
+  text-decoration: none;
+}
+
 .game-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -35,6 +39,12 @@ body {
   border-radius: 10px;
 }
 
+.game-message {
+  text-align: center;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .boards-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -45,7 +55,7 @@ body {
 .board {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 15px;
-  padding: 1rem;
+  padding: 2.5rem;
 }
 
 .board-title {
@@ -56,35 +66,38 @@ body {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
   gap: 2px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.1);
   padding: 2px;
   border-radius: 5px;
+  backdrop-filter: blur(10px);
 }
 
 .cell {
-  aspect-ratio: 1;
-  background: rgba(255, 255, 255, 0.1);
+  fill: rgba(255, 255, 255, 0);
+  stroke: rgba(255, 255, 255, 0.3);
   border-radius: 3px;
   cursor: pointer;
-  transition: background-color 0.2s;
 }
 
 .cell:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 
-.cell.ship {
-  background: #4caf50;
+.ship.placed {
+  fill: #4caf50;
 }
 
-.cell.hit {
-  background: #f44336;
+.ship.hit {
+  fill: #f44336;
 }
 
-.cell.miss {
-  background: #607d8b;
+.miss {
+  fill: #607d8b;
+}
+
+.hit {
+  fill: #f44336;
 }
 
 .button {
@@ -102,4 +115,28 @@ body {
 .button:hover {
   transform: scale(1.05);
   background: rgba(255, 255, 255, 0.2);
+}
+
+.cell-invalid {
+  fill: rgba(244, 67, 54, 0.3);
+}
+
+.hidden {
+  display: none;
+}
+
+.gameOver {
+  display: none;
+  visibility: hidden;
+}
+
+#gameOver {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  border-radius: 15px;
+  padding: 3rem;
+  background: linear-gradient(135deg, #1a2a6c, #2a4858);
 }
