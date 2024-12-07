@@ -84,20 +84,20 @@ a {
   background: rgba(255, 255, 255, 0.2);
 }
 
-.ship.placed {
+.sunk {
+  fill: #4b4b4b;
+}
+
+.ship {
   fill: #4caf50;
 }
 
-.ship.hit {
+.hit {
   fill: #f44336;
 }
 
 .miss {
   fill: #607d8b;
-}
-
-.hit {
-  fill: #f44336;
 }
 
 .button {

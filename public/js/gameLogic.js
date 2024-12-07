@@ -1,28 +1,54 @@
 const difficulty = retrieveDifficulty();
 const turnElem = document.getElementById("turn");
+const playerBoard = createBoard("#playerBoard");
+const enemyBoard = createBoard("#enemyBoard");
 let playerShips = null;
 let enemyShips = null;
 let playerTurn = true;
-const playerBoard = createBoard("#playerBoard");
-const enemyBoard = createBoard("#enemyBoard");
+let shipVertical = null;
+
+function isSunk(shipName, ships, board) {
+  const ship = ships.get(shipName);
+  if (!ship) return false;
+  let allCellsHit = true;
+  ship.cells.forEach(([x, y]) => {
+    const cell = board.select(`rect[data-x="${x}"][data-y="${y}"]`);
+    let temp = cell.classed("hit");
+    if (!temp) {
+      allCellsHit = false;
+    }
+  });
+  if (allCellsHit) {
+    shipVertical = null;
+    ship.cells.forEach(([x, y]) => {
+      board
+        .select(`rect[data-x="${x}"][data-y="${y}"]`)
+        .classed("sunk", true)
+        .classed("hit", false)
+        .classed("ship", false);
+    });
+  }
+  return allCellsHit;
+}
 
 function isHit(x, y, board) {
   const cell = board.select(`rect[data-x="${x}"][data-y="${y}"]`);
-  let temp = false;
-  let ships = enemyShips;
-  if (board === playerBoard) {
-    ships = playerShips;
-  }
+  let ships = board === playerBoard ? playerShips : enemyShips;
+  let hit = false;
   ships.forEach((shipData, shipName) => {
     const { cells, vertical } = shipData;
     cells.forEach(([shipX, shipY]) => {
       if (shipX === x && shipY === y) {
-        temp = true;
+        hit = true;
+        cell.classed("hit", true);
+        if (isSunk(shipName, ships, board)) {
+          console.log(`Sunk ${shipName} at (${x},${y})`);
+        }
       }
     });
   });
-  cell.classed(temp ? "hit" : "miss", true);
-  return temp;
+  if (!hit) cell.classed("miss", true);
+  return hit;
 }
 
 function gameLoop() {
@@ -50,18 +76,17 @@ function gameLoop() {
       let x = parseInt(d3.select(this).attr("data-x"));
       let y = parseInt(d3.select(this).attr("data-y"));
 
-      if (!playerTurn || gameOver(playerBoard)) {
+      if (!playerTurn) {
         return;
       }
-      playerTurn = false;
-      console.log(`Attempted shot at (${x},${y})`);
       // Handle player's shot
       if (!d3.select(this).classed("hit") && !d3.select(this).classed("miss")) {
+        playerTurn = false;
         let temp = isHit(x, y, enemyBoard);
-        console.log(`Hit was a ${temp ? "hit" : "miss"}`);
+        console.log(`Shot at (${x},${y}) was a ${temp ? "hit" : "miss"}`);
         turnElem.textContent = parseInt(turnElem.textContent) + 1;
+        enemyShot(difficulty);
       }
-      enemyShot(difficulty);
     });
   } else {
     //multiplayer
@@ -77,47 +102,137 @@ function replaceShips(board, ships) {
   ships.forEach((shipData, shipName) => {
     const { cells, vertical } = shipData;
     cells.forEach(([x, y]) => {
-      board
-        .select(`rect[data-x="${x}"][data-y="${y}"]`)
-        .classed("ship placed", true);
+      board.select(`rect[data-x="${x}"][data-y="${y}"]`).classed("ship", true);
     });
   });
 }
 
 function enemyShot(dif) {
-  if (gameOver(enemyBoard)) {
-    return;
-  }
+  if (gameOver(enemyBoard)) return;
   dif = parseInt(dif);
   if (dif === 1) {
     randomShot();
-    turnElem.textContent = parseInt(turnElem.textContent) + 1;
-    playerTurn = true;
   }
-  ///////////////////////////////////////////////////////////////
-  // Add other difficulties here
-  ///////////////////////////////////////////////////////////////
+  if (dif === 2) {
+    if (playerBoard.selectAll(".hit").size() > 0) {
+      if (sinkFound() === null) randomShot();
+    } else {
+      randomShot();
+    }
+  }
+  if (dif === 3) {
+    if (playerBoard.selectAll(".hit").size() > 0) {
+      if (sinkFound() === null) gridShot();
+    } else {
+      gridShot();
+    }
+  }
+  if (dif === 4) {
+    // not implemented yet
+  }
+  if (gameOver(playerBoard)) return;
+  turnElem.textContent = parseInt(turnElem.textContent) + 1;
+  playerTurn = true;
+}
+
+function validCoord(x, y, board) {
+  console.log(`Checking if (${x},${y}) is a valid coordinate`);
+  if (x >= 0 && x < 10 && y >= 0 && y < 10) {
+    const cell = board.select(`rect[data-x="${x}"][data-y="${y}"]`);
+    if (
+      !cell.classed("hit") &&
+      !cell.classed("miss") &&
+      !cell.classed("sunk")
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function sinkFound() {
+  let numHits = playerBoard.selectAll(".hit").size();
+  if (numHits === 1) {
+    const cell = playerBoard.selectAll(".hit");
+    const x = parseInt(cell.attr("data-x"));
+    const y = parseInt(cell.attr("data-y"));
+    if (validCoord(x + 1, y, playerBoard)) return isHit(x + 1, y, playerBoard);
+    if (validCoord(x - 1, y, playerBoard)) return isHit(x - 1, y, playerBoard);
+    if (validCoord(x, y + 1, playerBoard)) return isHit(x, y + 1, playerBoard);
+    if (validCoord(x, y - 1, playerBoard)) return isHit(x, y - 1, playerBoard);
+  }
+  if (shipVertical === null) {
+    let firstHit = null;
+    let secondHit = null;
+    playerBoard.selectAll(".hit").each(function (d, i) {
+      const cell = d3.select(this);
+      if (!firstHit) {
+        firstHit = {
+          x: parseInt(cell.attr("data-x")),
+          y: parseInt(cell.attr("data-y")),
+        };
+      } else if (!secondHit) {
+        secondHit = {
+          x: parseInt(cell.attr("data-x")),
+          y: parseInt(cell.attr("data-y")),
+        };
+      }
+    });
+    shipVertical = firstHit.x === secondHit.x;
+  }
+  let minX = Infinity;
+  let maxX = -Infinity;
+  let minY = Infinity;
+  let maxY = -Infinity;
+  playerBoard.selectAll(".hit").each(function () {
+    const cell = d3.select(this);
+    const x = parseInt(cell.attr("data-x"));
+    const y = parseInt(cell.attr("data-y"));
+    minX = Math.min(minX, x);
+    maxX = Math.max(maxX, x);
+    minY = Math.min(minY, y);
+    maxY = Math.max(maxY, y);
+  });
+  if (shipVertical) {
+    if (validCoord(minX, minY - 1, playerBoard)) {
+      return isHit(minX, minY - 1, playerBoard);
+    }
+    if (validCoord(minX, maxY + 1, playerBoard)) {
+      return isHit(minX, maxY + 1, playerBoard);
+    }
+  } else {
+    if (validCoord(minX - 1, minY, playerBoard)) {
+      return isHit(minX - 1, minY, playerBoard);
+    }
+    if (validCoord(maxX + 1, minY, playerBoard)) {
+      return isHit(maxX + 1, minY, playerBoard);
+    }
+  }
+  console.log("Could not find ship that has been hit once");
+  return null;
 }
 
 function randomShot() {
-  let count = 0;
   // Keep trying until we find a cell that hasn't been shot at
-  while (count < 1000) {
-    count++;
-    // Generate random coordinates
+  while (true) {
     const x = Math.floor(Math.random() * BOARD_SIZE);
     const y = Math.floor(Math.random() * BOARD_SIZE);
+    if (validCoord(x, y, playerBoard)) return isHit(x, y, playerBoard);
+  }
+}
 
-    // Check if this cell has already been shot at
-    const cell = playerBoard.select(`rect[data-x="${x}"][data-y="${y}"]`);
-    if (!cell.classed("hit") && !cell.classed("miss")) {
-      return isHit(x, y, playerBoard);
+function gridShot() {
+  while (true) {
+    const x = Math.floor(Math.random() * BOARD_SIZE);
+    const y = Math.floor(Math.random() * BOARD_SIZE);
+    if ((x + y) % 2 === 0) {
+      if (validCoord(x, y, playerBoard)) return isHit(x, y, playerBoard);
     }
   }
 }
 
 function gameOver(board) {
-  if (board.selectAll(".hit").size() >= 17) {
+  if (board.selectAll(".sunk").size() >= 17) {
     if (board === enemyBoard) {
       d3.select("#end").text("won.");
     }
