@@ -1,3 +1,4 @@
+// Switch forms between login and register
 document
   .getElementById("switch-to-register")
   .addEventListener("click", function () {
@@ -31,8 +32,10 @@ document
     const errorContainer = document.getElementById("login-error");
 
     if (response.ok) {
-      // Redirect on success
-      window.location.href = "/dashboard";
+      // Extract the username from the server response
+      const username = result.user.username;
+      // Redirect to the dashboard with the username in the URL
+      window.location.href = `/account/${encodeURIComponent(username)}`;
     } else {
       // Show error message
       errorContainer.textContent = result.error;
