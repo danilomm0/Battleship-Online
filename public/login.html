@@ -15,7 +15,7 @@
 
     <div class="form-container">
         <h2 id="form-title">Login</h2>
-        
+
         <div id="login-form" class="form-section">
             <form id="loginForm" method="POST">
                 <div id="login-error" class="error-message" style="color: red;"></div>
@@ -78,8 +78,10 @@
             const errorContainer = document.getElementById('login-error');
 
             if (response.ok) {
-                // Redirect on success
-                window.location.href = '/dashboard';
+                // Extract the username from the server response
+                const username = result.user.username;
+                // Redirect to the dashboard with the username in the URL
+                window.location.href = `/account/${encodeURIComponent(username)}`;
             } else {
                 // Show error message
                 errorContainer.textContent = result.error;
