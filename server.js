@@ -1,9 +1,10 @@
 const http = require("http"); // For creating an HTTP server
 const app = require("./app"); // Import the Express app
-//const connectDB = require("./config/database"); // MongoDB connection function
+const dotenv = require("dotenv"); // For loading environment variables
+const connectDB = require("./config/database"); // MongoDB connection function
 
 // dbconnection
-//connectDB();
+connectDB();
 
 // Create an HTTP server
 const server = http.createServer(app);

@@ -107,17 +107,17 @@ footer p {
       background: rgba(255, 255, 255, 0.1);          /* Semi-transparent background */
       border: 2px solid #a8c0ff;                     /* Light blue border */
       color: #a8c0ff;                                /* Light blue text */
-      font-size: 16px;                               /* Button font size */
-      padding: 8px 20px;                             /* Padding for a clickable area */
-      cursor: pointer;                               /* Pointer cursor on hover */
-      transition: all 0.3s ease;                     /* Smooth hover effects */
+      font-size: 16px;                               
+      padding: 8px 20px;                             
+      cursor: pointer;                             
+      transition: all 0.3s ease;                     
 }
     
 /* Hover effects for the button */
 .back_button:hover {
-      background: #a8c0ff;                           /* Light blue background on hover */
-      color: #1a2a6c;                                /* Darker text color on hover */
-      transform: scale(1.1);                         /* Slightly enlarge button */
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);     /* Subtle shadow for depth */
+      background: #a8c0ff;                           
+      color: #1a2a6c;                                
+      transform: scale(1.1);                       
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);     
 }
                
