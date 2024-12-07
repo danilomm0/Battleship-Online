@@ -2,10 +2,12 @@ const difficulty = retrieveDifficulty();
 const turnElem = document.getElementById("turn");
 const playerBoard = createBoard("#playerBoard");
 const enemyBoard = createBoard("#enemyBoard");
+const SHIP_SIZES = [5, 4, 3, 3, 2];
 let playerShips = null;
 let enemyShips = null;
 let playerTurn = true;
 let shipVertical = null;
+let heatMap = null;
 
 function isSunk(shipName, ships, board) {
   const ship = ships.get(shipName);
@@ -128,7 +130,7 @@ function enemyShot(dif) {
     }
   }
   if (dif === 4) {
-    // not implemented yet
+    impossibleShot();
   }
   if (gameOver(playerBoard)) return;
   turnElem.textContent = parseInt(turnElem.textContent) + 1;
@@ -194,19 +196,15 @@ function sinkFound() {
     maxY = Math.max(maxY, y);
   });
   if (shipVertical) {
-    if (validCoord(minX, minY - 1, playerBoard)) {
+    if (validCoord(minX, minY - 1, playerBoard))
       return isHit(minX, minY - 1, playerBoard);
-    }
-    if (validCoord(minX, maxY + 1, playerBoard)) {
+    if (validCoord(minX, maxY + 1, playerBoard))
       return isHit(minX, maxY + 1, playerBoard);
-    }
   } else {
-    if (validCoord(minX - 1, minY, playerBoard)) {
+    if (validCoord(minX - 1, minY, playerBoard))
       return isHit(minX - 1, minY, playerBoard);
-    }
-    if (validCoord(maxX + 1, minY, playerBoard)) {
+    if (validCoord(maxX + 1, minY, playerBoard))
       return isHit(maxX + 1, minY, playerBoard);
-    }
   }
   console.log("Could not find ship that has been hit once");
   return null;
@@ -231,11 +229,99 @@ function gridShot() {
   }
 }
 
+function isValidShipPlacement(startX, startY, size, horizontal, shots, hits) {
+  if (horizontal) {
+    if (startX < 0 || startX + size > 10) return false;
+    for (let i = 0; i < size; i++) {
+      const coord = `${startX + i},${startY}`;
+      if (shots.has(coord) && !hits.has(coord)) return false;
+    }
+  } else {
+    if (startY < 0 || startY + size > 10) return false;
+    for (let i = 0; i < size; i++) {
+      const coord = `${startX},${startY + i}`;
+      if (shots.has(coord) && !hits.has(coord)) return false;
+    }
+  }
+  return true;
+}
+
+function impossibleShot() {
+  if (gameOver(playerBoard)) return;
+  heatMap = Array(10)
+    .fill()
+    .map(() => Array(10).fill(0));
+
+  let shots = new Set();
+  playerBoard.selectAll(".hit, .miss, .sunk").each(function () {
+    const cell = d3.select(this);
+    const x = parseInt(cell.attr("data-x"));
+    const y = parseInt(cell.attr("data-y"));
+    shots.add(`${x},${y}`);
+  });
+
+  let hits = new Set();
+  playerBoard.selectAll(".hit").each(function () {
+    const cell = d3.select(this);
+    const x = parseInt(cell.attr("data-x"));
+    const y = parseInt(cell.attr("data-y"));
+    hits.add(`${x},${y}`);
+  });
+
+  let remainingShips = [...SHIP_SIZES];
+  playerBoard.selectAll(".sunk").each(function () {
+    const length = d3.select(this).size();
+    const index = remainingShips.indexOf(length);
+    if (index > -1) remainingShips.splice(index, 1);
+  });
+
+  for (let y = 0; y < 10; y++) {
+    for (let x = 0; x < 10; x++) {
+      if (shots.has(`${x},${y}`)) continue;
+      remainingShips.forEach((shipSize) => {
+        for (let i = 0; i < shipSize; i++) {
+          if (isValidShipPlacement(x - i, y, shipSize, true, shots, hits)) {
+            for (let j = 0; j < shipSize; j++) {
+              if (x - i + j >= 0 && x - i + j < 10) heatMap[y][x - i + j]++;
+            }
+          }
+        }
+        for (let i = 0; i < shipSize; i++) {
+          if (isValidShipPlacement(x, y - i, shipSize, false, shots, hits)) {
+            for (let j = 0; j < shipSize; j++) {
+              if (y - i + j >= 0 && y - i + j < 10) heatMap[y - i + j][x]++;
+            }
+          }
+        }
+      });
+      if (hits.size > 0) {
+        hits.forEach((hitCoord) => {
+          const [hitX, hitY] = hitCoord.split(",").map(Number);
+          const distance = Math.abs(x - hitX) + Math.abs(y - hitY);
+          if (distance === 1) heatMap[y][x] *= 2;
+        });
+      }
+    }
+  }
+  let maxProb = -1;
+  let bestShots = [];
+  for (let y = 0; y < 10; y++) {
+    for (let x = 0; x < 10; x++) {
+      if (validCoord(x, y, playerBoard)) {
+        if (heatMap[y][x] > maxProb) {
+          maxProb = heatMap[y][x];
+          bestShots = [[x, y]];
+        } else if (heatMap[y][x] === maxProb) bestShots.push([x, y]);
+      }
+    }
+  }
+  const [x, y] = bestShots[Math.floor(Math.random() * bestShots.length)];
+  return isHit(x, y, playerBoard);
+}
+
 function gameOver(board) {
   if (board.selectAll(".sunk").size() >= 17) {
-    if (board === enemyBoard) {
-      d3.select("#end").text("won.");
-    }
+    if (board === enemyBoard) d3.select("#end").text("won.");
     d3.select("#gameOver").classed("gameOver", false);
     return true;
   }
