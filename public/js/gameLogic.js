@@ -80,7 +80,7 @@ function gameLoop() {
         return;
       }
       // Handle player's shot
-      if (!d3.select(this).classed("hit") && !d3.select(this).classed("miss")) {
+      if (validCoord(x, y, enemyBoard)) {
         playerTurn = false;
         let temp = isHit(x, y, enemyBoard);
         console.log(`Shot at (${x},${y}) was a ${temp ? "hit" : "miss"}`);
