@@ -5,7 +5,8 @@ const routes = require("./routes/index.js");
 const app = express();
 
 // middlewear usage
-// app.use(express.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // routes

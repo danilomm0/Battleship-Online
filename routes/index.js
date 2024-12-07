@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require("path");
 const router = express.Router();
+const { register, authenticateUser } = require = require("./middleware/login.js")
 
 router.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));
@@ -10,6 +11,10 @@ router.get('/', (req, res) => {
 router.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/login.html'))
 });
+
+router.post("/login", authenticateUser);
+
+router.post("/register", register);
 
 router.get('/help', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/help.html'))
