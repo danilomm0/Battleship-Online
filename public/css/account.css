@@ -1,70 +1,121 @@
-/* CSS for Account Page */
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.nav-container {
-    width: 100%;
-    padding: 16px 32px;
-    background-color: #4caf50;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+body {
+  background: linear-gradient(135deg, #1a2a6c, #2a4858);
+  min-height: 100vh;
+  color: white;
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  padding: 16px;
+}
+
+.title {
+  font-size: 56px;
+  margin-bottom: 16px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+.nav {
+  position: absolute;
+  top: 20px;
+  left: 10px;
 }
 
 .back_button {
-    text-decoration: none;
-    font-size: 18px;
-    color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid #a8c0ff;
+  color: #a8c0ff;
+  font-size: 16px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .back_button:hover {
-    text-decoration: underline;
+  background: #a8c0ff;
+  color: #1a2a6c;
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.account-container {
-    max-width: 600px;
-    margin: 50px auto;
-    background: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    padding: 20px;
-    text-align: center;
+.account {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
-.account-container h1 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: #4caf50;
+.profile-section {
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
-.stats-container {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
+.profile-title {
+  font-size: 2.5rem;
+  color: #a8c0ff;
+  margin-bottom: 1rem;
 }
 
-.stat {
-    background-color: #e8f5e9;
-    border: 1px solid #c8e6c9;
-    border-radius: 8px;
-    padding: 16px;
-    width: 120px;
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
 }
 
-.stat h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-    color: #388e3c;
+.container {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-.stat p {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 0;
+.container h2 {
+  color: #a8c0ff;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.grid {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 250px));
+  gap: 2rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.card h3 {
+  color: #a8c0ff;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.card h4 {
+  color: #a8c0ff;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.achievement-desc {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
 }
