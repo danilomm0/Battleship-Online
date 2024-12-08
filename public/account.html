@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Page</title>
+    <link rel="stylesheet" href="./css/account.css">
+</head>
+
+<body>
+    <div class="nav-container">
+        <a href="/" class="back_button">&larr; Back to Home</a>
+    </div>
+
+    <div class="account-container">
+        <h1 id="username">Welcome, User</h1>
+
+        <div class="stats-container">
+            <div class="stat">
+                <h2>Wins</h2>
+                <p id="wins">0</p>
+            </div>
+            <div class="stat">
+                <h2>Losses</h2>
+                <p id="losses">0</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch data from URL and API
+        window.onload = async () => {
+            // Extract username from the URL path
+            const urlSegments = window.location.pathname.split('/');
+            const username = urlSegments[urlSegments.length - 1]; // Assumes /account/username
+
+            // API fetch to get user stats
+            try {
+                const response = await fetch(`/api/account/${username}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('username').textContent = `Welcome, ${data.username}`;
+                    document.getElementById('wins').textContent = data.wins;
+                    document.getElementById('losses').textContent = data.losses;
+                } else {
+                    console.error('Failed to fetch user stats.');
+                }
+            } catch (err) {
+                console.error('Error fetching data:', err);
+            }
+        };
+    </script>
+</body>
+
+</html>

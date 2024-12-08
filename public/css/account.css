@@ -1,0 +1,70 @@
+/* CSS for Account Page */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.nav-container {
+    width: 100%;
+    padding: 16px 32px;
+    background-color: #4caf50;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.back_button {
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+}
+
+.back_button:hover {
+    text-decoration: underline;
+}
+
+.account-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+
+.account-container h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #4caf50;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.stat {
+    background-color: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    border-radius: 8px;
+    padding: 16px;
+    width: 120px;
+}
+
+.stat h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #388e3c;
+}
+
+.stat p {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}

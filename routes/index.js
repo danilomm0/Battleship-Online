@@ -18,28 +18,32 @@ router.post("/login", authenticateUser);
 router.post("/register", register);
 
 router.get('/account/:username', async (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/account.html'))
+});
+
+router.get('/api/account/:username', async (req, res) => {
     const { username } = req.params;
 
     try {
-        // Fetch user using utility function
+        // Fetch user from the database
         const user = await getUserByUsername(username);
 
         if (!user) {
-            // Redirect to home if user does not exist
-            return res.redirect('/');
+            return res.status(404).json({ error: 'User not found' });
         }
 
-        // Return account details as JSON
+        // Return user details as JSON
         res.status(200).json({
             username: user.username,
             wins: user.wins,
             losses: user.losses,
         });
     } catch (err) {
-        console.error(`Error in /account/:username route: ${err.message}`);
-        res.redirect('/');
+        console.error(`Error fetching user data: ${err.message}`);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 router.get('/help', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/help.html'))
 });
