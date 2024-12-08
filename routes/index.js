@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require("path");
 const router = express.Router();
+const { v4: uuidv4 } = require('uuid');
 const { getUserByUsername } = require("./middleware/fetchData.js")
 const { register, authenticateUser } = require("./middleware/login.js");
 
@@ -53,6 +54,77 @@ router.get('/place-ships', (req, res) => {
     const mode = req.query.difficulty;
     console.log(mode);
     res.sendFile(path.join(__dirname, '../public/placeShips.html'));
+});
+
+
+// Create a new multiplayer game
+router.post('/create', async (req, res) => {
+    const { userId, username, board } = req.body;
+
+    try {
+        const gameId = uuidv4();
+        const newGame = new Game({
+            gameId,
+            players: [
+                {
+                    userId,
+                    username,
+                    board,
+                },
+            ],
+        });
+
+        await newGame.save();
+        res.status(201).json({ gameId, message: 'Game created successfully!' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to create the game.' });
+    }
+});
+
+// Join an existing multiplayer game
+router.post('/join/:gameId', async (req, res) => {
+    const { gameId } = req.params;
+    const { userId, username, board } = req.body;
+
+    try {
+        const game = await Game.findOne({ gameId });
+
+        if (!game) {
+            return res.status(404).json({ error: 'Game not found.' });
+        }
+
+        if (game.players.length >= 2) {
+            return res.status(400).json({ error: 'Game already full.' });
+        }
+
+        game.players.push({ userId, username, board });
+        game.currentTurn = game.players[0].userId; // Set the first player as the current turn
+        await game.save();
+
+        res.status(200).json({ message: 'Joined the game successfully!', game });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to join the game.' });
+    }
+});
+
+// Fetch game state
+router.get('/:gameId', async (req, res) => {
+    const { gameId } = req.params;
+
+    try {
+        const game = await Game.findOne({ gameId }).populate('players.userId').populate('currentTurn');
+
+        if (!game) {
+            return res.status(404).json({ error: 'Game not found.' });
+        }
+
+        res.status(200).json(game);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch game state.' });
+    }
 });
 
 module.exports = router;
