@@ -14,26 +14,15 @@ function makeShips() {
       .append("g")
       .attr("class", "ship-group")
       .attr("transform", `translate(10, ${index * (CELL_SIZE + 20)})`);
-
+    
     shipGroup
-      .append("rect")
-      .attr("class", "ship")
-      .attr("width", ship.size * CELL_SIZE)
-      .attr("height", CELL_SIZE)
-      .attr("data-size", ship.size)
-      .attr("data-name", ship.name);
-
-    //Code to add ship images to rectangles
-    //Still trying to figure out how make 
-    //Both rect and image dragable together
-    /*shipGroup
       .append("image")
       .attr("class", "ship")
       .attr("width", ship.size * CELL_SIZE)
       .attr("height", CELL_SIZE)
       .attr("href", "images\\" + ship.name + ".png")
       .attr("data-size", ship.size)
-      .attr("data-name", ship.name);*/
+      .attr("data-name", ship.name);
   });
 }
 
