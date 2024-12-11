@@ -2,8 +2,9 @@ const express = require('express');
 const path = require("path");
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
-const { getUserByUsername } = require("./middleware/fetchData.js")
+const { getUserByUsername, getLobbyById } = require("./middleware/fetchData.js")
 const { register, authenticateUser } = require("./middleware/login.js");
+const { updateWL } = require("./middleware/writeData.js")
 
 router.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));
@@ -82,31 +83,19 @@ router.post('/create', async (req, res) => {
     }
 });
 
-// Join an existing multiplayer game
-router.post('/join/:gameId', async (req, res) => {
-    const { gameId } = req.params;
-    const { userId, username, board } = req.body;
 
-    try {
-        const game = await Game.findOne({ gameId });
+router.post('/api/:username', async (req, res) => {
+    const { username } = req.params;
+    const { status } = req.body;
+  
+    // if (typeof status !== 'number' || (status !== 0 && status !== 1)) {
+    //   console.error('Invalid status provided. Must be 0 (loss) or 1 (win).');
+    //   return;
+    // }
+  
+    // Call the separate function to handle the database write
+    await updateUserRecord(username, status);
+  });
 
-        if (!game) {
-            return res.status(404).json({ error: 'Game not found.' });
-        }
-
-        if (game.players.length >= 2) {
-            return res.status(400).json({ error: 'Game already full.' });
-        }
-
-        game.players.push({ userId, username, board });
-        game.currentTurn = game.players[0].userId; // Set the first player as the current turn
-        await game.save();
-
-        res.status(200).json({ message: 'Joined the game successfully!', game });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Failed to join the game.' });
-    }
-});
 
 module.exports = router;
