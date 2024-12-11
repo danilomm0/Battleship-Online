@@ -1,71 +1,16 @@
-// Initialize the socket connection
-const socket = io(); // Add server URL if needed (e.g., io("http://localhost:3000"))
+const socket = io();
 
-// Create a BroadcastChannel for cross-tab communication
-const channel = new BroadcastChannel("socketChannel");
-
-// Notify other tabs when the socket connects
+// Handle reconnection
 socket.on("connect", () => {
-    console.log("Socket connected:", socket.id);
-    channel.postMessage({ event: "connect", id: socket.id });
-});
+    const gameID = sessionStorage.getItem("gameID");
+    const playerNumber = sessionStorage.getItem("playerNumber");
 
-// Listen for `gameReady` event from the server
-socket.on("gameReady", ({ gameID }) => {
-    console.log(`Game ${gameID} is ready.`);
-    channel.postMessage({ event: "gameReady", gameID });
-});
-
-// Listen for `playerAssigned` event
-socket.on("playerAssigned", ({ playerNumber }) => {
-    console.log(`You are Player ${playerNumber}`);
-    channel.postMessage({ event: "playerAssigned", playerNumber });
-});
-
-// Listen for `gameStart` event
-socket.on("gameStart", ({ message }) => {
-    console.log(message);
-    channel.postMessage({ event: "gameStart", message });
-});
-
-// Listen for `receiveAttack` event
-socket.on("receiveAttack", ({ x, y }) => {
-    console.log(`Attack received at (${x}, ${y})`);
-    channel.postMessage({ event: "receiveAttack", x, y });
-});
-
-// Listen for `receiveResult` event
-socket.on("receiveResult", ({ hit }) => {
-    console.log(`Attack result: ${hit ? "Hit" : "Miss"}`);
-    channel.postMessage({ event: "receiveResult", hit });
-});
-
-// Listen for messages from other tabs
-channel.onmessage = (message) => {
-    const { event, data } = message.data;
-
-    switch (event) {
-        case "placeShips":
-            socket.emit("placeShips", data.gameID);
-            break;
-        case "joinLobby":
-            socket.emit("joinGame", data.gameID);
-            break;
-        case "attack":
-            socket.emit("attack", { gameID: data.gameID, x: data.x, y: data.y });
-            break;
-        case "attackResult":
-            socket.emit("attackResult", { gameID: data.gameID, hit: data.hit });
-            break;
+    if (gameID && playerNumber) {
+        console.log(`Rejoining game ${gameID} as Player ${playerNumber}`);
+        socket.emit("rejoinGame", { gameID, playerNumber });
+    } else {
+        console.log("No game state found in sessionStorage.");
     }
-};
+});
 
-// Expose functions for other scripts
-window.socketHandler = {
-    joinLobby: (gameID) => channel.postMessage({ event: "joinLobby", data: { gameID } }),
-    placeShips: (gameID) => channel.postMessage({ event: "placeShips", data: { gameID } }),
-    attack: (gameID, x, y) =>
-        channel.postMessage({ event: "attack", data: { gameID, x, y } }),
-    attackResult: (gameID, hit) =>
-        channel.postMessage({ event: "attackResult", data: { gameID, hit } }),
-};
+window.globalSocket = socket;

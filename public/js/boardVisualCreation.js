@@ -20,7 +20,7 @@ function makeShips() {
       .attr("class", "ship")
       .attr("width", ship.size * CELL_SIZE)
       .attr("height", CELL_SIZE)
-      .attr("href", "images\\" + ship.name + ".png")
+      .attr("href", "/images\\" + ship.name + ".png")
       .attr("data-size", ship.size)
       .attr("data-name", ship.name);
   });
@@ -179,7 +179,7 @@ function placeShip(x, y, size, name) {
     .select(`image[data-name="${name}"]`)
     .attr("width", isVertical ? CELL_SIZE : size * CELL_SIZE)
     .attr("height", isVertical ? size * CELL_SIZE : CELL_SIZE)
-    .attr("href", "images\\" + name + (isVertical ? "Vert" : "") + ".png")
+    .attr("href", "/images\\" + name + (isVertical ? "Vert" : "") + ".png")
     .attr("x", x * CELL_SIZE)
     .attr("y", y * CELL_SIZE)
     .attr("visibility", "visible");
@@ -205,7 +205,7 @@ document.addEventListener("keydown", (e) => {
         .attr("height", isVertical ? size * CELL_SIZE : CELL_SIZE)
         .attr(
           "href",
-          "images\\" +
+          "/images\\" +
             ship.attr("data-name") +
             (isVertical ? "Vert" : "") +
             ".png"

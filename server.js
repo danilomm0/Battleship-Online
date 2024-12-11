@@ -14,37 +14,70 @@ const io = socketIo(server);
 io.on('connection', (socket) => {
     console.log(`Client connected: ${socket.id}`);
 
+    socket.on("rejoinGame", async ({ gameID, playerNumber }) => {
+        try {
+            console.log(`Client ${socket.id} attempting to rejoin lobby ${gameID} as Player ${playerNumber}`);
+            let currGame = await getLobbyById(gameID);
+    
+            if (!currGame) {
+                socket.emit("error", "Lobby not found");
+                return;
+            }
+    
+            // Ensure the player slot matches the playerNumber
+            const playerIndex = playerNumber - 1; // Player 1 maps to index 0
+            if (currGame.players[playerIndex] && currGame.players[playerIndex] !== socket.id) {
+                currGame.players[playerIndex] = socket.id; // Update to the new socket ID
+                await currGame.save();
+            }
+    
+            socket.join(gameID);
+            console.log(`Player ${playerNumber} (${socket.id}) rejoined game ${gameID}`);
+    
+            // Send the current game state to the rejoining player
+            socket.emit("gameState", { message: "Welcome back to the game!" });
+        } catch (error) {
+            console.error(`Error in rejoinGame for ${socket.id}:`, error);
+            socket.emit("error", "Failed to rejoin the game");
+        }
+    });
+
     // Handle joining a game
-    socket.on('joinGame', async (gameID) => {
+    socket.on("joinGame", async (gameID) => {
         try {
             console.log(`Client ${socket.id} attempting to join lobby ${gameID}`);
             let currGame = await getLobbyById(gameID);
 
             if (!currGame) {
-                socket.emit('error', 'Lobby not found');
+                socket.emit("error", "Lobby not found");
                 return;
             }
 
             if (currGame.players.length >= 2) {
-                socket.emit('error', 'Lobby is full');
+                socket.emit("error", "Lobby is full");
                 return;
             }
 
-            currGame.players.push(socket.id);
-            await currGame.save();
+            // Assign player slot if not already in the game
+            if (!currGame.players.includes(socket.id)) {
+                currGame.players.push(socket.id);
+                await currGame.save();
+            }
+
             socket.join(gameID);
 
-            const playerNumber = currGame.players.length;
-            socket.emit('playerAssigned', { playerNumber });
+            const playerNumber = currGame.players.indexOf(socket.id) + 1; // Get player's slot
+            socket.emit("playerAssigned", { playerNumber });
 
             console.log(`Player ${playerNumber} (${socket.id}) joined lobby ${gameID}`);
 
+            // Notify when the room is ready
             if (currGame.players.length === 2) {
-                io.to(gameID).emit('gameReady', { gameID });
+                io.to(gameID).emit("gameReady", { gameID });
             }
         } catch (error) {
             console.error(`Error in joinGame for ${socket.id}:`, error);
-            socket.emit('error', 'Failed to join the game');
+            socket.emit("error", "Failed to join the game");
         }
     });
 
@@ -147,7 +180,7 @@ io.on('connection', (socket) => {
     // });
     socket.on('disconnect', () => {
         console.log(`Client disconnected: ${socket.id}`);
-        
+
     });
 });
 

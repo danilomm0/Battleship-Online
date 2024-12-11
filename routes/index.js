@@ -38,6 +38,7 @@ router.get("/place-ships", (req, res) => {
 router.get("/place-ships/:gameID", (req, res) => {
     const mode = req.query.difficulty;
     console.log(mode);
+    console.log("multi")
     res.sendFile(path.join(__dirname, "../public/placeShips.html"));
 });
 
