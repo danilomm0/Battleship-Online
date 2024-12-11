@@ -170,3 +170,8 @@ body {
   position: absolute;
   top: 20px;
 }
+
+.disable {
+  cursor: not-allowed;
+  pointer-events: none;
+}

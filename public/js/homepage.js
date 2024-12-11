@@ -26,6 +26,10 @@ function dashboard() {
 
 function hidePopup(temp) {
   d3.select("#popup").classed("hidden", temp);
+  d3.selectAll(".button").classed("disable", !temp);
+  d3.selectAll(".button2").classed("disable", !temp);
+  d3.select("#hide").classed("disable", temp);
+  d3.select("#enter").classed("disable", temp);
 }
 
 function joinGame() {
