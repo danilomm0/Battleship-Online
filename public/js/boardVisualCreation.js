@@ -248,6 +248,9 @@ function reset() {
       .select(`image[data-name="${ship.name}"]`)
       .attr("x", -1)
       .attr("y", -1)
+      .attr("width", ship.size * CELL_SIZE)
+      .attr("height", CELL_SIZE)
+      .attr("href", "images\\" + ship.name + ".png" )
       .attr("visibility", "hidden");
 
   });
