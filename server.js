@@ -13,66 +13,137 @@ const io = socketIo(server);
 
 io.on('connection', (socket) => {
     console.log(`Client connected: ${socket.id}`);
-    
+
+    // Handle joining a game
     socket.on('joinGame', async (gameID) => {
-        console.log(`Client ${socket.id} joined lobby ${lobbyId}`);
-        let currGame = await getLobbyById(gameID)
+        try {
+            console.log(`Client ${socket.id} attempting to join lobby ${gameID}`);
+            let currGame = await getLobbyById(gameID);
 
-        // if (!currGame) {
-        //     cGame = new Lobby({gameID, players: [socket.id]})
-        //     await cGame.save()
-        //     socket.join(gameID);
-        //     // socket.emit('playerAssigned', { playerNumber: 1 });
-        //     console.log(`Player 1 (${socket.id}) joined lobby ${gameID}`);
-        //     return
-        // }
+            if (!currGame) {
+                socket.emit('error', 'Lobby not found');
+                return;
+            }
 
-        if (currGame.players.length >= 2) {
-            return;
+            if (currGame.players.length >= 2) {
+                socket.emit('error', 'Lobby is full');
+                return;
+            }
+
+            currGame.players.push(socket.id);
+            await currGame.save();
+            socket.join(gameID);
+
+            const playerNumber = currGame.players.length;
+            socket.emit('playerAssigned', { playerNumber });
+
+            console.log(`Player ${playerNumber} (${socket.id}) joined lobby ${gameID}`);
+
+            if (currGame.players.length === 2) {
+                io.to(gameID).emit('gameReady', { gameID });
+            }
+        } catch (error) {
+            console.error(`Error in joinGame for ${socket.id}:`, error);
+            socket.emit('error', 'Failed to join the game');
         }
-
-        currGame.players.push(socket.id)
-        await currGame.save();
-        socket.join(gameID);
-
-        const playerNumber = currGame.players.length; 
-        socket.emit('playerAssigned', { playerNumber });
-
-        console.log(`Player ${playerNumber} (${socket.id}) joined lobby ${gameID}`);
-
-        if (currGame.players.length === 2) {
-            io.to(gameID).emit('gameReady', {gameID});
-        }
-  
     });
 
-    socket.on('attack', async ({gameID, x, y}) => {
-        console.log(`Attack on socket ${socket.id} in gameID ${gameID} at coords ${x},${y}`)
+    // Handle placing ships
+    socket.on('placeShips', async (gameID) => {
+        try {
+            let currGame = await getLobbyById(gameID);
 
-        let currGame = await getLobbyById(gameID)
-        const player = currGame.players.indexOf(socket.id) + 1;
+            if (!currGame) {
+                socket.emit('error', 'Lobby not found');
+                return;
+            }
 
-        if (player !== currGame.currentTurn) {
-            // socket.emit('error', 'not yo turn boy');
-            return;
+            const pIndx = currGame.players.indexOf(socket.id);
+            if (pIndx === -1) {
+                socket.emit('error', 'Player not in lobby');
+                return;
+            }
+
+            // Mark this player as ready
+            currGame.ready[pIndx] = true;
+            await currGame.save();
+
+            // Check if both players are ready
+            if (currGame.ready.every((status) => status)) {
+                io.to(gameID).emit('gameStart', { message: 'Game is starting!' });
+            }
+        } catch (error) {
+            console.error(`Error in placeShips for ${socket.id}:`, error);
+            socket.emit('error', 'Failed to place ships');
         }
-
-        socket.to(gameID).emit('receiveAttack', {x,y});
     });
 
-    socket.on('attackResult', async ({gameID, hit}) => {
-        console.log(`Attack result on socket ${socket.id} in game ${gameID} hit: ${hit}`)
-        
-        let currGame = await getLobbyById(gameID)
+    // Handle attacks
+    socket.on('attack', async ({ gameID, x, y }) => {
+        try {
+            console.log(`Attack from ${socket.id} in game ${gameID} at coords (${x}, ${y})`);
 
-        socket.to(gameID).emit('receiveResult', {hit});
+            let currGame = await getLobbyById(gameID);
 
-        currGame.currentTurn = currGame.currentTurn === 1 ? 2 : 1;
+            if (!currGame) {
+                socket.emit('error', 'Lobby not found');
+                return;
+            }
+
+            const player = currGame.players.indexOf(socket.id) + 1;
+            if (player !== currGame.currentTurn) {
+                socket.emit('error', 'Not your turn');
+                return;
+            }
+
+            // Send attack to the opponent
+            socket.to(gameID).emit('receiveAttack', { x, y });
+        } catch (error) {
+            console.error(`Error in attack for ${socket.id}:`, error);
+            socket.emit('error', 'Failed to process attack');
+        }
     });
 
-    socket.on('disconnect', () => {
-        console.log(`Client disconnected: ${socket.id}`);
-        
+    // Handle attack results
+    socket.on('attackResult', async ({ gameID, hit }) => {
+        try {
+            console.log(`Attack result from ${socket.id} in game ${gameID}, hit: ${hit}`);
+
+            let currGame = await getLobbyById(gameID);
+
+            if (!currGame) {
+                socket.emit('error', 'Lobby not found');
+                return;
+            }
+
+            // Notify opponent of the attack result
+            socket.to(gameID).emit('receiveResult', { hit });
+
+            // Switch turn
+            currGame.currentTurn = currGame.currentTurn === 1 ? 2 : 1;
+            await currGame.save();
+        } catch (error) {
+            console.error(`Error in attackResult for ${socket.id}:`, error);
+            socket.emit('error', 'Failed to process attack result');
+        }
+    });
+
+    // Handle player disconnection
+    socket.on('disconnect', async () => {
+        try {
+            console.log(`Client disconnected: ${socket.id}`);
+            let currGame = await findGameByPlayer(socket.id);
+
+            if (currGame) {
+                currGame.players = currGame.players.filter((player) => player !== socket.id);
+                await currGame.save();
+
+                io.to(currGame.lobbyId).emit('playerDisconnected', { playerID: socket.id });
+                console.log(`Removed player ${socket.id} from game ${currGame.lobbyId}`);
+            }
+        } catch (error) {
+            console.error(`Error handling disconnect for ${socket.id}:`, error);
+        }
     });
 });
 
