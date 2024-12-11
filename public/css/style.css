@@ -95,7 +95,8 @@ body {
   filter: brightness(1.1);
 }
 
-.button2 {
+.button2,
+.button3 {
   border-radius: 25px;
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid #a8c0ff;
@@ -106,7 +107,8 @@ body {
   margin-left: 30px;
 }
 
-.button2:hover {
+.button2:hover,
+.button3:hover {
   background: #a8c0ff;
   color: #1a2a6c;
   transform: scale(1.1);
@@ -153,6 +155,11 @@ body {
   visibility: hidden;
 }
 
+.disable {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .popup {
   position: absolute;
   top: 50%;
@@ -162,16 +169,36 @@ body {
   border-radius: 15px;
   padding: 3rem;
   background: linear-gradient(135deg, #1a2a6c, #2a4858);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+}
+
+.content {
+  display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 20px;
+  width: 100%;
+  margin-top: 20px;
 }
 
 #hide {
   position: absolute;
-  top: 20px;
+  margin: 0px;
+  top: 10px;
+  left: 10px;
 }
 
-.disable {
-  cursor: not-allowed;
-  pointer-events: none;
+input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #a8c0ff;
+  border-radius: 4px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.popup-title {
+  font-size: 28px;
+  color: #a8c0ff;
 }

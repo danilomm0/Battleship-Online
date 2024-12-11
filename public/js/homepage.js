@@ -28,11 +28,11 @@ function hidePopup(temp) {
   d3.select("#popup").classed("hidden", temp);
   d3.selectAll(".button").classed("disable", !temp);
   d3.selectAll(".button2").classed("disable", !temp);
-  d3.select("#hide").classed("disable", temp);
-  d3.select("#enter").classed("disable", temp);
+  d3.selectAll(".mode-card").classed("disable", !temp);
+  d3.selectAll(".nav-container").classed("disable", !temp);
 }
 
 function joinGame() {
   let code = d3.select("#code").property("value");
-  socket.emit('joinRoom', String(code));
+  socket.emit("joinRoom", String(code));
 }
