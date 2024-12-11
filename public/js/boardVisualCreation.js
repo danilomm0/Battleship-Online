@@ -14,7 +14,7 @@ function makeShips() {
       .append("g")
       .attr("class", "ship-group")
       .attr("transform", `translate(10, ${index * (CELL_SIZE + 20)})`);
-    
+
     shipGroup
       .append("image")
       .attr("class", "ship")
@@ -60,29 +60,30 @@ function dragging(event, d) {
   const gridY = Math.floor(mouseY / CELL_SIZE);
 
   // Clear previous hover states
-  d3.selectAll(".cell-hover, .cell-invalid").attr("class", "cell");
+  d3.selectAll(".hover").classed("hover", false);
+  d3.selectAll(".invalid").classed("invalid", false);
 
   // Check if placement is valid
   const isValid = isValidPlacement(gridX, gridY, shipSize);
   const cells = getCellsForShip(gridX, gridY, shipSize);
 
-  const ship = board.select(`image[data-name="${selectedShip.attr("data-name")}"]`);
-  if(isValid){
+  const ship = board.select(
+    `image[data-name="${selectedShip.attr("data-name")}"]`
+  );
+  if (isValid) {
     ship
       .attr("x", gridX * CELL_SIZE)
       .attr("y", gridY * CELL_SIZE)
       .attr("visibility", "visible");
-  }else{
-    ship
-      .attr("x", -1)
-      .attr("y", -1)
-      .attr("visibility", "hidden");
+  } else {
+    ship.attr("x", -1).attr("y", -1).attr("visibility", "hidden");
   }
 
   cells.forEach(([x, y]) => {
     if (x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE) {
       const cell = board.select(`rect[data-x="${x}"][data-y="${y}"]`);
-      cell.attr("class", isValid ? "cell-hover" : "cell-invalid");
+      if (isValid) cell.classed("hover", true);
+      else cell.classed("invalid", true);
     }
   });
 }
@@ -101,7 +102,8 @@ function dragEnded(event, d) {
   const shipName = selectedShip.attr("data-name");
 
   // Clear hover states
-  d3.selectAll(".cell-hover, .cell-invalid").attr("class", "cell");
+  d3.selectAll(".hover").classed("hover", false);
+  d3.selectAll(".invalid").classed("invalid", false);
 
   if (isValidPlacement(gridX, gridY, shipSize)) {
     placeShip(gridX, gridY, shipSize, shipName);
@@ -177,7 +179,7 @@ function placeShip(x, y, size, name) {
     .select(`image[data-name="${name}"]`)
     .attr("width", isVertical ? CELL_SIZE : size * CELL_SIZE)
     .attr("height", isVertical ? size * CELL_SIZE : CELL_SIZE)
-    .attr("href", "images\\" + name + (isVertical ? "Vert" : "") + ".png" )
+    .attr("href", "images\\" + name + (isVertical ? "Vert" : "") + ".png")
     .attr("x", x * CELL_SIZE)
     .attr("y", y * CELL_SIZE)
     .attr("visibility", "visible");
@@ -195,11 +197,19 @@ document.addEventListener("keydown", (e) => {
     isVertical = !isVertical;
     if (selectedShip) {
       const size = parseInt(selectedShip.attr("data-size"));
-      const ship = board.select(`image[data-name="${selectedShip.attr("data-name")}"]`);
+      const ship = board.select(
+        `image[data-name="${selectedShip.attr("data-name")}"]`
+      );
       ship
         .attr("width", isVertical ? CELL_SIZE : size * CELL_SIZE)
         .attr("height", isVertical ? size * CELL_SIZE : CELL_SIZE)
-        .attr("href", "images\\" + ship.attr("data-name") + (isVertical ? "Vert" : "") + ".png" );
+        .attr(
+          "href",
+          "images\\" +
+            ship.attr("data-name") +
+            (isVertical ? "Vert" : "") +
+            ".png"
+        );
     }
   }
 });
@@ -219,7 +229,10 @@ function updateStartButton() {
 function placeRandom() {
   // Clear board and reset ships
   placedShips.clear();
-  board.selectAll("rect").classed("ship placed", false);
+  d3.selectAll(".ship").classed("ship", false);
+  d3.selectAll(".placed").classed("placed", false);
+  d3.selectAll(".hover").classed("hover", false);
+  d3.selectAll(".invalid").classed("invalid", false);
   d3.selectAll(".ship-group").remove();
 
   // Place ships randomly
@@ -249,7 +262,6 @@ function reset() {
       .attr("x", -1)
       .attr("y", -1)
       .attr("visibility", "hidden");
-
   });
   d3.selectAll(".ship-group").remove();
   makeShips();

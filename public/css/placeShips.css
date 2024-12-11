@@ -62,20 +62,6 @@ body {
   margin: 1rem;
 }
 
-.ship {
-  fill: #a8c0ff;
-  cursor: move;
-}
-
-.ship.dragging {
-  opacity: 0;
-}
-
-.ship.placed {
-  fill: rgba(255, 255, 255, 0);
-  stroke: rgba(255, 255, 255, 0);
-}
-
 .controls {
   display: flex;
   justify-content: center;
@@ -128,11 +114,24 @@ body {
   cursor: pointer;
 }
 
-.cell-hover {
-  fill: rgba(255, 255, 255, 0);
+.ship {
+  fill: #4caf50;
 }
 
-.cell-invalid {
+.ship.dragging {
+  opacity: 0;
+}
+
+.ship.placed {
+  fill: #4caf50;
+  stroke: rgba(255, 255, 255, 0);
+}
+
+.hover {
+  fill: #4caf50;
+}
+
+.invalid {
   fill: rgba(244, 67, 54, 0.3);
 }
 
