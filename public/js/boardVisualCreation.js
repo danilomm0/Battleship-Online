@@ -279,5 +279,5 @@ function reset() {
 function start() {
   storeDifficulty();
   storeGameBoard("playerBoard", placedShips);
-  window.location.href = "game.html";
+  window.location.href = "/play-game";
 }
