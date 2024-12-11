@@ -66,7 +66,10 @@
             onclick="hidePopup(true)">Back</button>
         <div class="content">
             <h2 class="popup-title">Join Lobby</h2>
-            <input type="text" id="code" required placeholder="Enter Code Here">
+            <div class="error hidden" id="error">Lobby not found</div>
+            <input type="text" id="code" required placeholder="Enter Code Here"
+                onkeydown="hideError(true)" onpaste="hideError(true)"
+                oncut="hideError(true)">
             <button class="button3" id="enter" onclick="joinGame()">Join
                 Game</button>
         </div>
