@@ -35,7 +35,9 @@ document
       // Extract the username from the server response
       const username = result.user.username;
       // Redirect to the dashboard with the username in the URL
+      writeLoginStatus(username)
       window.location.href = `/account/${encodeURIComponent(username)}`;
+      
     } else {
       // Show error message
       errorContainer.textContent = result.error;
