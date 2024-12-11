@@ -1,4 +1,13 @@
 const board = createBoard("#playerBoard");
+const difficulty = retrieveDifficulty();
+
+console.log(`Difficulty is ${difficulty}`);
+
+if (difficulty === 0) {
+  d3.select("#info").classed("hidden", false);
+  const lobbyCode = document.getElementById("lobby-code");
+  lobbyCode.textContent; // TO DO ////////////////////////////////////////////////////
+}
 
 // Initialize ship dock
 const shipDock = d3

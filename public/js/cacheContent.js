@@ -5,23 +5,23 @@ function storeDifficulty() {
   // url params
   const urlParams = new URLSearchParams(window.location.search);
   const difficulty = urlParams.get("difficulty");
-  // store in local cache
+  // store in session cache
   sessionStorage.setItem("gameDifficulty", difficulty);
 }
 
 /**
- * Storing the playerBoard locally
+ * Storing the playerBoard in the session
  *
  * @param {String} type either pass playerBoard or enemyBoard
  * @param {Map} board the playerboard
  */
 function storeGameBoard(type, board) {
-  // store board locally
+  // store board in the session
   sessionStorage.setItem(type, JSON.stringify(Array.from(board)));
 }
 
 /**
- * Getting current game difficulty from local storage
+ * Getting current game difficulty from session storage
  *
  * @returns Int -> the game difficulty
  */
@@ -31,13 +31,13 @@ function retrieveDifficulty() {
     return difficulty;
   }
   console.error(
-    "Couldnt get the difficulty from local storage :( Returning max difficulty!"
+    "Couldnt get the difficulty from session storage :( Returning max difficulty!"
   );
   return 4;
 }
 
 /**
- * Retriving the game board from the local storage
+ * Retriving the game board from the session storage
  *
  * @param {String} type either pass playerBoard or enemyBoard
  * @returns Map of the game board requested
@@ -47,7 +47,7 @@ function retrieveGameBoard(type) {
   if (storedBoard) {
     return new Map(JSON.parse(storedBoard));
   }
-  console.error("Couldnt get board from local storage. :(");
+  console.error("Couldnt get board from session storage. :(");
   return null;
 }
 
@@ -60,7 +60,7 @@ function writeLoginStatus(username) {
 }
 
 /**
- * Clears the login status from local storage, signifying a logout
+ * Clears the login status from in the session storage, signifying a logout
  */
 function clearLoginStatus() {
   sessionStorage.removeItem("battleShipLogin");
