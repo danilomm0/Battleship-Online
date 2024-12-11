@@ -35,23 +35,18 @@ router.get("/place-ships", (req, res) => {
 });
 
 
-router.post("/api/:username", async (req, res) => {
-    const { username } = req.params;
-    const { status } = req.body;
-
-    try {
-        await updateWL(username, status);
-    } catch (err) {
-        console.error("Error with the WL");
-        res.status(500).json({ error: "Internal server error" });
-    }
+router.get("/place-ships/:gameID", (req, res) => {
+    const mode = req.query.difficulty;
+    console.log(mode);
+    res.sendFile(path.join(__dirname, "../public/placeShips.html"));
 });
 
 
+
 router.post('/api/createLobby', async (req, res) => {
+    console.log("HERE");
     try {
         const gameID = await createLobby();
-
         console.log(`Created new gameID: ${gameID}`);
 
         // back to frontend the data goes
@@ -74,6 +69,19 @@ router.post("/api/gameStatus/:gameID", async (req, res) => {
         res.status(200).json({ message: "Game exists" });
     } catch (err) {
         console.error("Error with the Game Status");
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+
+router.post("/api/:username", async (req, res) => {
+    const { username } = req.params;
+    const { status } = req.body;
+
+    try {
+        await updateWL(username, status);
+    } catch (err) {
+        console.error("Error with the WL");
         res.status(500).json({ error: "Internal server error" });
     }
 });

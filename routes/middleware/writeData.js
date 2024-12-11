@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const User = require("../../models/User");
 const Game = require("../../models/GameStatus")
 
@@ -42,6 +43,7 @@ const createLobby = async () => {
         return lobbyId;
     } catch (err) {
         console.error(`Error creating lobby: ${err.message}`);
+        return null;
     }
 };
 
