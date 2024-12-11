@@ -1,5 +1,5 @@
-const http = require("http"); 
-const app = require("./app"); 
+const http = require("http");
+const app = require("./app");
 const socketIo = require('socket.io'); // scockets
 const connectDB = require("./config/database"); // MongoDB connection function
 

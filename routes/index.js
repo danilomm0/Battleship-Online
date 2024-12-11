@@ -109,22 +109,4 @@ router.post('/join/:gameId', async (req, res) => {
     }
 });
 
-// Fetch game state
-router.get('/:gameId', async (req, res) => {
-    const { gameId } = req.params;
-
-    try {
-        const game = await Game.findOne({ gameId }).populate('players.userId').populate('currentTurn');
-
-        if (!game) {
-            return res.status(404).json({ error: 'Game not found.' });
-        }
-
-        res.status(200).json(game);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Failed to fetch game state.' });
-    }
-});
-
 module.exports = router;
