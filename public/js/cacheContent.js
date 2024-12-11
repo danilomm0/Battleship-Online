@@ -73,7 +73,7 @@ function clearLoginStatus() {
  * @returns The username if logged in else null
  */
 function getLoginStatus() {
-    const username = localStorage.get("battleShipLogin");
+    const username = localStorage.getItem("battleShipLogin");
     if (username) {
         return username;
     }
