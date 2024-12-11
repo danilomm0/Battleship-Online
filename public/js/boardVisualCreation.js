@@ -1,9 +1,6 @@
 const board = createBoard("#playerBoard");
-const difficulty = retrieveDifficulty();
-
-console.log(`Difficulty is ${difficulty}`);
-
-if (difficulty === 0) {
+storeDifficulty();
+if (retrieveDifficulty() === 0) {
   d3.select("#info").classed("hidden", false);
   const lobbyCode = document.getElementById("lobby-code");
   lobbyCode.textContent; // TO DO ////////////////////////////////////////////////////

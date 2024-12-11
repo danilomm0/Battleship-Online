@@ -64,6 +64,9 @@ function gameLoop() {
 
   // Update difficulty display
   const difficultyElem = document.getElementById("difficulty");
+  console.log(
+    `${difficultyElem} and ${difficultyElem.textContent} and ${difficulty}`
+  );
   if (difficultyElem) {
     difficultyElem.textContent = DIFFICULTY[difficulty];
   } else {
@@ -119,20 +122,20 @@ function replaceShips(board, ships) {
     imageX = 9;
     imageY = 9;
 
-    for(let cell of cells){
-      if(cell[0] < imageX) imageX = cell[0];
-      if(cell[1] < imageY) imageY = cell[1];
+    for (let cell of cells) {
+      if (cell[0] < imageX) imageX = cell[0];
+      if (cell[1] < imageY) imageY = cell[1];
     }
-  
+
     board
       .select(`image[data-name="${shipName}"]`)
       .attr("width", vertical ? CELL_SIZE : cells.length * CELL_SIZE)
       .attr("height", vertical ? cells.length * CELL_SIZE : CELL_SIZE)
-      .attr("href", "images\\" + shipName + (vertical ? "Vert" : "") + ".png" )
+      .attr("href", "/images\\" + shipName + (vertical ? "Vert" : "") + ".png")
       .attr("x", imageX * CELL_SIZE)
       .attr("y", imageY * CELL_SIZE)
       .attr("visibility", "visible");
-    
+
     cells.forEach(([x, y]) => {
       board.select(`rect[data-x="${x}"][data-y="${y}"]`).classed("ship", true);
     });
