@@ -24,17 +24,17 @@ function makeShips() {
       .attr("data-size", ship.size)
       .attr("data-name", ship.name);
   });
+
+  // Drag behavior
+  const drag = d3
+    .drag()
+    .on("start", dragStarted)
+    .on("drag", dragging)
+    .on("end", dragEnded);
+  d3.selectAll(".ship").call(drag);
 }
 
 makeShips();
-
-// Drag behavior
-const drag = d3
-  .drag()
-  .on("start", dragStarted)
-  .on("drag", dragging)
-  .on("end", dragEnded);
-d3.selectAll(".ship").call(drag);
 
 /**
  * drag has started
@@ -65,6 +65,19 @@ function dragging(event, d) {
   // Check if placement is valid
   const isValid = isValidPlacement(gridX, gridY, shipSize);
   const cells = getCellsForShip(gridX, gridY, shipSize);
+
+  const ship = board.select(`image[data-name="${selectedShip.attr("data-name")}"]`);
+  if(isValid){
+    ship
+      .attr("x", gridX * CELL_SIZE)
+      .attr("y", gridY * CELL_SIZE)
+      .attr("visibility", "visible");
+  }else{
+    ship
+      .attr("x", -1)
+      .attr("y", -1)
+      .attr("visibility", "hidden");
+  }
 
   cells.forEach(([x, y]) => {
     if (x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE) {
@@ -160,6 +173,15 @@ function placeShip(x, y, size, name) {
   const cells = getCellsForShip(x, y, size);
   placedShips.set(name, { cells, vertical: isVertical });
 
+  board
+    .select(`image[data-name="${name}"]`)
+    .attr("width", isVertical ? CELL_SIZE : size * CELL_SIZE)
+    .attr("height", isVertical ? size * CELL_SIZE : CELL_SIZE)
+    .attr("href", "images\\" + name + (isVertical ? "Vert" : "") + ".png" )
+    .attr("x", x * CELL_SIZE)
+    .attr("y", y * CELL_SIZE)
+    .attr("visibility", "visible");
+
   cells.forEach(([x, y]) => {
     board
       .select(`rect[data-x="${x}"][data-y="${y}"]`)
@@ -173,9 +195,11 @@ document.addEventListener("keydown", (e) => {
     isVertical = !isVertical;
     if (selectedShip) {
       const size = parseInt(selectedShip.attr("data-size"));
-      selectedShip
+      const ship = board.select(`image[data-name="${selectedShip.attr("data-name")}"]`);
+      ship
         .attr("width", isVertical ? CELL_SIZE : size * CELL_SIZE)
-        .attr("height", isVertical ? size * CELL_SIZE : CELL_SIZE);
+        .attr("height", isVertical ? size * CELL_SIZE : CELL_SIZE)
+        .attr("href", "images\\" + ship.attr("data-name") + (isVertical ? "Vert" : "") + ".png" );
     }
   }
 });
@@ -219,6 +243,14 @@ function placeRandom() {
 function reset() {
   placedShips.clear();
   board.selectAll("rect").classed("ship placed", false);
+  SHIPS.forEach((ship) => {
+    board
+      .select(`image[data-name="${ship.name}"]`)
+      .attr("x", -1)
+      .attr("y", -1)
+      .attr("visibility", "hidden");
+
+  });
   d3.selectAll(".ship-group").remove();
   makeShips();
 }

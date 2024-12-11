@@ -72,7 +72,8 @@ body {
 }
 
 .ship.placed {
-  fill: #4caf50;
+  fill: rgba(255, 255, 255, 0);
+  stroke: rgba(255, 255, 255, 0);
 }
 
 .controls {
@@ -128,7 +129,7 @@ body {
 }
 
 .cell-hover {
-  fill: #a8c0ff;
+  fill: rgba(255, 255, 255, 0);
 }
 
 .cell-invalid {
