@@ -35,14 +35,26 @@ function hidePopup(temp) {
 }
 
 function startGame() {
-    console.log("Hello?");
-    createGame().then((gameID) => {
-        console.log("Game created and joined with ID:", gameID);
-        window.location.href = `/place-ships/${gameID}?difficulty=0`;
-    }).catch((error) => {
-        console.error("Failed to start the game:", error.message);
-        alert("Could not create or join the game. Please try again.");
-    });
+    console.log("Starting game creation process");
+    
+    createGame()
+        .then((gameID) => {
+            if (!gameID) {
+                throw new Error("Invalid game ID");
+            }
+            
+            console.log("Game created and joined with ID:", gameID);
+            window.location.href = `/place-ships/${gameID}?difficulty=0`;
+        })
+        .catch((error) => {
+            console.error("Game creation process failed:", {
+                name: error.name,
+                message: error.message,
+                stack: error.stack
+            });
+            
+            alert(`Game creation failed: ${error.message}. Please try again or check your connection.`);
+        });
 }
 
 function createGame() {
@@ -50,26 +62,47 @@ function createGame() {
     return fetch("/api/createLobby", {
         method: "POST",
     })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.log("Failed to create lobby");
-            }
-        })
-        .then((data) => {
-            console.log("The newGameID", data.gameID);
-            return joinGameAPI(data.gameID).then((success) => {
-                if (success) {
-                    return data.gameID;
-                } else {
-                    console.log("Failed to join the game after creation");
-                }
-            });
-        }).catch((error) => {
-            console.error("Error:", error.message);
-            console.log("Another error -_-")
+    .then((response) => {
+        console.log("Full response:", response);
+        console.log("Response status:", response.status);
+        console.log("Response ok:", response.ok);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return response.json();
+    })
+    .then((data) => {
+        console.log("Received data:", data);
+        
+        // Explicit check for gameID
+        if (!data || !data.gameID) {
+            throw new Error("No game ID received");
+        }
+
+        console.log("The newGameID", data.gameID);
+        
+        // Directly return the gameID if you're not using joinGameAPI
+        return data.gameID;
+        
+        // If you want to keep joinGameAPI, use this:
+        // return joinGameAPI(data.gameID).then((success) => {
+        //     if (success) {
+        //         return data.gameID;
+        //     } else {
+        //         throw new Error("Failed to join the game");
+        //     }
+        // });
+    })
+    .catch((error) => {
+        console.error("Complete error details:", {
+            name: error.name,
+            message: error.message,
+            stack: error.stack
         });
+        throw error;
+    });
 }
 
 function joinGame() {
@@ -90,6 +123,7 @@ function joinGameAPI(gameID) {
                 socket.emit("joinRoom", String(code));
                 return true;
             } else {
+                console.log("HERE2");
                 console.log("Game not found or some other error.");
                 return false;
             }

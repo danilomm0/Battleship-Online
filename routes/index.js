@@ -56,7 +56,7 @@ router.post('/api/createLobby', async (req, res) => {
         console.log(`Created new gameID: ${gameID}`);
 
         // back to frontend the data goes
-        res.status(201).json({ gameID: gameID });
+        res.status(200).json({ gameID: gameID });
     } catch (err) {
         console.error('Error creating gameID:', err.message);
         res.status(500).json({ error: 'Failed to create newGame' });

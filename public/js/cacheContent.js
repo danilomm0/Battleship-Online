@@ -27,6 +27,7 @@ function storeGameBoard(type, board) {
  */
 function retrieveDifficulty() {
   const difficulty = sessionStorage.getItem("gameDifficulty");
+  console.log(difficulty);
   if (difficulty) {
     return difficulty;
   }
