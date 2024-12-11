@@ -6,12 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/homepage.js"></script>
+    <script src="js/cacheContent.js"></script>
+    <script src="/js/d3.js"></script>
+    <script type="module" src="/js/gsocket.js"></script>
 </head>
 
-<body onload="localStorage.clear()">
+<body onload="load()">
     <div class="nav-container">
-        <button class="button2" id="login"
-            onclick="window.location.href='/login'">Login</button>
+        <button class="button2 hidden" id="dashboard"
+            onclick="dashboard()">Dashboard</button>
+        <button class="button2" id="login" onclick="login()">Login</button>
+        <button class="button2 hidden" id="logout"
+            onclick="logout()">Logout</button>
     </div>
 
     <div class="header">
@@ -21,23 +28,26 @@
     <div class="game-modes">
         <div class="mode-card">
             <h2 class="mode-title">Single Player</h2>
-            <form action="/place-ships" method="GET">
-                <input type="hidden" name="difficulty" value="1">
-                <button class="button" type="submit" id="easy">Easy</button>
-            </form>
-            <form action="/place-ships" method="GET">
-                <input type="hidden" name="difficulty" value="2">
-                <button class="button" type="submit" id="medium">Medium</button>
-            </form>
-            <form action="/place-ships" method="GET">
-                <input type="hidden" name="difficulty" value="3">
-                <button class="button" type="submit" id="hard">Hard</button>
-            </form>
-            <form action="/place-ships" method="GET">
-                <input type="hidden" name="difficulty" value="4">
-                <button class="button" type="submit"
-                    id="impossible">Impossible</button>
-            </form>
+            <div class="ai-modes">
+                <form action="/place-ships" method="GET">
+                    <input type="hidden" name="difficulty" value="1">
+                    <button class="button" type="submit" id="easy">Easy</button>
+                </form>
+                <form action="/place-ships" method="GET">
+                    <input type="hidden" name="difficulty" value="2">
+                    <button class="button" type="submit"
+                        id="medium">Medium</button>
+                </form>
+                <form action="/place-ships" method="GET">
+                    <input type="hidden" name="difficulty" value="3">
+                    <button class="button" type="submit" id="hard">Hard</button>
+                </form>
+                <form action="/place-ships" method="GET">
+                    <input type="hidden" name="difficulty" value="4">
+                    <button class="button" type="submit"
+                        id="impossible">Impossible</button>
+                </form>
+            </div>
         </div>
 
 
@@ -45,8 +55,20 @@
             <h2 class="mode-title">Online Battle</h2>
             <div class="button-container">
                 <button class="button" id="create">Create Lobby</button>
-                <button class="button" id="join">Join Lobby</button>
+                <button class="button" id="join" onclick="hidePopup(false)">Join
+                    Lobby</button>
             </div>
+        </div>
+    </div>
+
+    <div class="popup hidden" id="popup">
+        <button class="button3" id="hide"
+            onclick="hidePopup(true)">Back</button>
+        <div class="content">
+            <h2 class="popup-title">Join Lobby</h2>
+            <input type="text" id="code" required placeholder="Enter Code Here">
+            <button class="button3" id="enter" onclick="joinGame()">Join
+                Game</button>
         </div>
     </div>
 

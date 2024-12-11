@@ -50,3 +50,30 @@ function retrieveGameBoard(type) {
   console.error("Couldnt get board from local storage. :(");
   return null;
 }
+
+/**
+ *
+ * @param {*} username The username setting of this user
+ */
+function writeLoginStatus(username) {
+  localStorage.setItem("battleShipLogin", username);
+}
+
+/**
+ * Clears the login status from local storage, signifying a logout
+ */
+function clearLoginStatus() {
+  localStorage.removeItem("battleShipLogin");
+}
+
+/**
+ *
+ * @returns The username if logged in else null
+ */
+function getLoginStatus() {
+  const username = localStorage.getItem("battleShipLogin");
+  if (username) {
+    return username;
+  }
+  return null;
+}

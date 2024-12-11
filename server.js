@@ -1,8 +1,9 @@
-const http = require("http"); 
-const app = require("./app"); 
+const http = require("http");
+const app = require("./app");
 const socketIo = require('socket.io'); // scockets
 const connectDB = require("./config/database"); // MongoDB connection function
-
+const { getLobbyById } = require("./routes/middleware/fetchData.js");
+const Lobby = require("./models/GameStatus.js")
 // dbconnection
 connectDB();
 
@@ -11,65 +12,74 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 io.on('connection', (socket) => {
-  console.log('A player connected:', socket.id);
+    console.log(`Client connected: ${socket.id}`);
+    
+    socket.on('joinGame', async (gameID) => {
+        console.log(`Client ${socket.id} joined lobby ${lobbyId}`);
+        let currGame = await getLobbyById(gameID)
 
-  // Join a game room
-  socket.on('joinGame', ({ gameId, userId }) => {
-    socket.join(gameId);
-    console.log(`User ${userId} joined game ${gameId}`);
-    io.to(gameId).emit('playerJoined', { userId });
-  });
+        // if (!currGame) {
+        //     cGame = new Lobby({gameID, players: [socket.id]})
+        //     await cGame.save()
+        //     socket.join(gameID);
+        //     // socket.emit('playerAssigned', { playerNumber: 1 });
+        //     console.log(`Player 1 (${socket.id}) joined lobby ${gameID}`);
+        //     return
+        // }
 
-  // Make a move
-  socket.on('makeMove', async ({ gameId, userId, move }) => {
-    try {
-      const game = await Game.findOne({ gameId });
+        if (currGame.players.length >= 2) {
+            return;
+        }
 
-      if (!game) {
-        return socket.emit('error', { message: 'Game not found.' });
-      }
+        currGame.players.push(socket.id)
+        await currGame.save();
+        socket.join(gameID);
 
-      if (game.currentTurn.toString() !== userId) {
-        return socket.emit('error', { message: 'Not your turn.' });
-      }
+        const playerNumber = currGame.players.length; 
+        socket.emit('playerAssigned', { playerNumber });
 
-      // Process the move and update the board
-      const player = game.players.find((p) => p.userId.toString() === userId);
-      if (!player) {
-        return socket.emit('error', { message: 'Player not found in game.' });
-      }
+        console.log(`Player ${playerNumber} (${socket.id}) joined lobby ${gameID}`);
 
-      // Update game state (you'd replace this with your move logic)
-      player.board = move.updatedBoard;
+        if (currGame.players.length === 2) {
+            io.to(gameID).emit('gameReady', {gameID});
+        }
+  
+    });
 
-      // Check for game end conditions (e.g., all ships sunk)
-      const opponent = game.players.find((p) => p.userId.toString() !== userId);
-      if (opponent && opponent.board.every((row) => row.every((cell) => cell !== 'ship'))) {
-        game.gameState = 'completed';
-        player.status = 'won';
-        opponent.status = 'lost';
-      } else {
-        // Switch turn
-        game.currentTurn = opponent.userId;
-      }
+    socket.on('attack', async ({gameID, x, y}) => {
+        console.log(`Attack on socket ${socket.id} in gameID ${gameID} at coords ${x},${y}`)
 
-      await game.save();
-      io.to(gameId).emit('gameStateUpdated', game);
-    } catch (err) {
-      console.error(err);
-      socket.emit('error', { message: 'Failed to make move.' });
-    }
-  });
+        let currGame = await getLobbyById(gameID)
+        const player = currGame.players.indexOf(socket.id) + 1;
 
-  socket.on('disconnect', () => {
-    console.log('A player disconnected:', socket.id);
-  });
+        if (player !== currGame.currentTurn) {
+            // socket.emit('error', 'not yo turn boy');
+            return;
+        }
+
+        socket.to(gameID).emit('receiveAttack', {x,y});
+    });
+
+    socket.on('attackResult', async ({gameID, hit}) => {
+        console.log(`Attack result on socket ${socket.id} in game ${gameID} hit: ${hit}`)
+        
+        let currGame = await getLobbyById(gameID)
+
+        socket.to(gameID).emit('receiveResult', {hit});
+
+        currGame.currentTurn = currGame.currentTurn === 1 ? 2 : 1;
+    });
+
+    socket.on('disconnect', () => {
+        console.log(`Client disconnected: ${socket.id}`);
+        
+    });
 });
-
 
 PORT = 5000; // comment out after other items are uncommented
 
 // Start listening for incoming requests
 server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
+
