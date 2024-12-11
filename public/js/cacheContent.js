@@ -6,7 +6,7 @@ function storeDifficulty() {
   const urlParams = new URLSearchParams(window.location.search);
   const difficulty = urlParams.get("difficulty");
   // store in local cache
-  localStorage.setItem("gameDifficulty", difficulty);
+  sessionStorage.setItem("gameDifficulty", difficulty);
 }
 
 /**
@@ -17,7 +17,7 @@ function storeDifficulty() {
  */
 function storeGameBoard(type, board) {
   // store board locally
-  localStorage.setItem(type, JSON.stringify(Array.from(board)));
+  sessionStorage.setItem(type, JSON.stringify(Array.from(board)));
 }
 
 /**
@@ -26,7 +26,7 @@ function storeGameBoard(type, board) {
  * @returns Int -> the game difficulty
  */
 function retrieveDifficulty() {
-  const difficulty = localStorage.getItem("gameDifficulty");
+  const difficulty = sessionStorage.getItem("gameDifficulty");
   if (difficulty) {
     return difficulty;
   }
@@ -43,7 +43,7 @@ function retrieveDifficulty() {
  * @returns Map of the game board requested
  */
 function retrieveGameBoard(type) {
-  const storedBoard = localStorage.getItem(type);
+  const storedBoard = sessionStorage.getItem(type);
   if (storedBoard) {
     return new Map(JSON.parse(storedBoard));
   }
@@ -56,14 +56,14 @@ function retrieveGameBoard(type) {
  * @param {*} username The username setting of this user
  */
 function writeLoginStatus(username) {
-  localStorage.setItem("battleShipLogin", username);
+  sessionStorage.setItem("battleShipLogin", username);
 }
 
 /**
  * Clears the login status from local storage, signifying a logout
  */
 function clearLoginStatus() {
-  localStorage.removeItem("battleShipLogin");
+  sessionStorage.removeItem("battleShipLogin");
 }
 
 /**
@@ -71,7 +71,7 @@ function clearLoginStatus() {
  * @returns The username if logged in else null
  */
 function getLoginStatus() {
-  const username = localStorage.getItem("battleShipLogin");
+  const username = sessionStorage.getItem("battleShipLogin");
   if (username) {
     return username;
   }
