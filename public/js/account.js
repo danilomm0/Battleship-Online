@@ -38,6 +38,7 @@ window.onload = async () => {
       }
       if (achievements === 0) d3.select("#none").classed("hidden", false);
     } else {
+      window.location.href = '/'
       console.error("Failed to fetch user stats.");
     }
   } catch (err) {
