@@ -30,7 +30,5 @@ function hidePopup(temp) {
 
 function joinGame() {
   let code = d3.select("#code").property("value");
-  console.log(code);
-  // funny words magic man
-  return null;
+  socket.emit('joinRoom', String(code));
 }
