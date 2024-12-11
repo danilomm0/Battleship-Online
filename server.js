@@ -129,21 +129,25 @@ io.on('connection', (socket) => {
     });
 
     // Handle player disconnection
-    socket.on('disconnect', async () => {
-        try {
-            console.log(`Client disconnected: ${socket.id}`);
-            let currGame = await findGameByPlayer(socket.id);
+    // socket.on('disconnect', async () => {
+    //     try {
+    //         console.log(`Client disconnected: ${socket.id}`);
+    //         let currGame = await findGameByPlayer(socket.id);
 
-            if (currGame) {
-                currGame.players = currGame.players.filter((player) => player !== socket.id);
-                await currGame.save();
+    //         if (currGame) {
+    //             currGame.players = currGame.players.filter((player) => player !== socket.id);
+    //             await currGame.save();
 
-                io.to(currGame.lobbyId).emit('playerDisconnected', { playerID: socket.id });
-                console.log(`Removed player ${socket.id} from game ${currGame.lobbyId}`);
-            }
-        } catch (error) {
-            console.error(`Error handling disconnect for ${socket.id}:`, error);
-        }
+    //             io.to(currGame.lobbyId).emit('playerDisconnected', { playerID: socket.id });
+    //             console.log(`Removed player ${socket.id} from game ${currGame.lobbyId}`);
+    //         }
+    //     } catch (error) {
+    //         console.error(`Error handling disconnect for ${socket.id}:`, error);
+    //     }
+    // });
+    socket.on('disconnect', () => {
+        console.log(`Client disconnected: ${socket.id}`);
+        
     });
 });
 

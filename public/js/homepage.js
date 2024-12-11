@@ -1,5 +1,4 @@
 let username = null;
-const channel = new BroadcastChannel("socketChannel");
 
 function load() {
   username = getLoginStatus();
