@@ -1,5 +1,7 @@
+let username = null;
+
 function load() {
-  let username = getLoginStatus();
+  username = getLoginStatus();
   if (username) {
     d3.select("#dashboard").classed("hidden", false);
     d3.select("#logout").classed("hidden", false);
@@ -20,4 +22,15 @@ function logout() {
 
 function dashboard() {
   window.location.href = "/account/" + username;
+}
+
+function hidePopup(temp) {
+  d3.select("#popup").classed("hidden", temp);
+}
+
+function joinGame() {
+  let code = d3.select("#code").property("value");
+  console.log(code);
+  // funny words magic man
+  return null;
 }

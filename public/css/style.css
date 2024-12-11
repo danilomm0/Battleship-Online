@@ -55,6 +55,12 @@ body {
   backdrop-filter: blur(10px);
 }
 
+.ai-modes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
 .mode-card:hover {
   background: rgba(255, 255, 255, 0.15);
 }
@@ -145,4 +151,22 @@ body {
 .hidden {
   display: none;
   visibility: hidden;
+}
+
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  border-radius: 15px;
+  padding: 3rem;
+  background: linear-gradient(135deg, #1a2a6c, #2a4858);
+  flex-direction: column;
+  align-items: center;
+}
+
+#hide {
+  position: absolute;
+  top: 20px;
 }
