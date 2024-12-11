@@ -6,12 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/homepage.js"></script>
+    <script src="js/cacheContent.js"></script>
+    <script src="/js/d3.js"></script>
 </head>
 
-<body onload="localStorage.clear()">
+<body onload="load()">
     <div class="nav-container">
-        <button class="button2" id="login"
-            onclick="window.location.href='/login'">Login</button>
+        <button class="button2 hidden" id="dashboard"
+            onclick="dashboard()">Dashboard</button>
+        <button class="button2" id="login" onclick="login()">Login</button>
+        <button class="button2 hidden" id="logout"
+            onclick="logout()">Logout</button>
     </div>
 
     <div class="header">
