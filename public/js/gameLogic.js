@@ -334,7 +334,21 @@ function gameOver(board) {
   if (board.selectAll(".sunk").size() >= 17) {
     if (board === enemyBoard) d3.select("#end").text("won.");
     d3.select("#gameOver").classed("gameOver", false);
+    const username = getLoginStatus();
+    if (username) updateUserStatus(username, board === enemyBoard ? 1 : 0);
     return true;
   }
   return false;
+}
+
+function updateUserStatus(username, status) {
+  fetch(`/api/${username}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ status }),
+  }).catch((err) => {
+    console.error(`Error making request: ${err.message}`);
+  });
 }
