@@ -1,7 +1,5 @@
-let username = null;
-
 function load() {
-  username = getLoginStatus();
+  let username = getLoginStatus();
   if (username) {
     d3.select("#dashboard").classed("hidden", false);
     d3.select("#logout").classed("hidden", false);
