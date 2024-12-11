@@ -41,5 +41,18 @@ function createBoard(id) {
     }
   }
 
+  SHIPS.forEach((ship, index) => {
+    board
+      .append("image")
+      .attr("visibility", "hidden")
+      .attr("x", -1)
+      .attr("y", -1)
+      .attr("width", ship.size * CELL_SIZE)
+      .attr("height", CELL_SIZE)
+      .attr("href", "images\\" + ship.name + ".png")
+      .attr("data-size", ship.size)
+      .attr("data-name", ship.name);
+  });
+
   return board;
 }
