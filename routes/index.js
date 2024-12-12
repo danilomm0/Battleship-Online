@@ -47,6 +47,11 @@ router.get("/play-game", (req, res) => {
     res.sendFile(path.join(__dirname, "../public/game.html"));
 });
 
+router.get("/play-game/:gameID", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public/game.html"));
+});
+
+
 
 
 router.post('/api/createLobby', async (req, res) => {

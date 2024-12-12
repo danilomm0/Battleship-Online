@@ -9,6 +9,9 @@ let playerTurn = true;
 let shipVertical = null;
 let heatMap = null;
 
+const gameID = getGameID();
+const playerID = getPlayerID();
+
 function isSunk(shipName, ships, board) {
   const ship = ships.get(shipName);
   if (!ship) return false;
@@ -73,6 +76,19 @@ function gameLoop() {
   // Add click handlers for ai board
   if (difficulty === "0") {
     // multiplayer
+    console.log("multiplayer!");
+
+    enemyBoard.selectAll("rect").on("click", function () {
+      let x = parseInt(d3.select(this).attr("data-x"));
+      let y = parseInt(d3.select(this).attr("data-y"));
+
+      // Handle player's shot
+      if (validCoord(x, y, enemyBoard)) {
+        console.log(`Shot at (${x},${y})`);
+        window.globalSocket.emit('attack', { gameID, playerID, x, y});
+      }
+    });
+    
   } else {
     placeRandom();
     enemyShips = placedShips;
@@ -358,3 +374,17 @@ function updateUserStatus(username, status) {
     console.error(`Error making request: ${err.message}`);
   });
 }
+
+
+window.globalSocket.on("receiveAttack", (data) => {
+  const { x, y, recivedPlayerID } = data;
+  if (recivedPlayerID === playerID) {return;}
+  const isaHit = isHit(x,y,playerBoard);
+  window.globalSocket.emit('attackResult', { gameID, playerID, isaHit, x, y });
+});
+
+window.globalSocket.on("receiveResult", (data) => {
+  const { hit, recivedPlayerID, x, y } = data;
+  if (recivedPlayerID !== playerID) {return;}
+
+});

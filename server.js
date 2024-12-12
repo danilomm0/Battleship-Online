@@ -84,25 +84,21 @@ io.on('connection', (socket) => {
     });
 
     // Handle placing ships
-    socket.on('placeShips', async (gameID) => {
+    socket.on('placeShips', async ({ gameID, playerID }) => {
         try {
             let currGame = await getLobbyById(gameID);
-
+            console.log(`${gameID} finished placing shits!`);
             if (!currGame) {
                 socket.emit('error', 'Lobby not found');
                 return;
             }
-
-            const pIndx = currGame.players.indexOf(socket.id);
-            if (pIndx === -1) {
-                socket.emit('error', 'Player not in lobby');
-                return;
-            }
-
+            console.log(`fuck going on here: ${playerID}`);
+    
             // Mark this player as ready
-            currGame.ready[pIndx] = true;
+            currGame.players[playerID-1] = socket.id;
+            currGame.ready[playerID-1] = true;
             await currGame.save();
-
+            console.log(currGame);
             // Check if both players are ready
             if (currGame.ready.every((status) => status)) {
                 io.to(gameID).emit('gameStart', { message: 'Game is starting!' });
@@ -114,7 +110,7 @@ io.on('connection', (socket) => {
     });
 
     // Handle attacks
-    socket.on('attack', async ({ gameID, x, y }) => {
+    socket.on('attack', async ({ gameID, playerID, x, y }) => {
         try {
             console.log(`Attack from ${socket.id} in game ${gameID} at coords (${x}, ${y})`);
 
@@ -125,14 +121,23 @@ io.on('connection', (socket) => {
                 return;
             }
 
-            const player = currGame.players.indexOf(socket.id) + 1;
-            if (player !== currGame.currentTurn) {
+            if (currGame.players[playerID-1] !== socket.id) {
+                currGame.players[playerID-1] = socket.id;
+                await currGame.save()
+            }
+
+            if (playerID !== currGame.currentTurn) {
+                console.log("Not this players turn!");
                 socket.emit('error', 'Not your turn');
                 return;
             }
+            
+            // Switch turn
+            currGame.currentTurn = currGame.currentTurn === 1 ? 2 : 1;
+            await currGame.save();
 
             // Send attack to the opponent
-            socket.to(gameID).emit('receiveAttack', { x, y });
+            socket.to(gameID).emit('receiveAttack', { x, y, playerID });
         } catch (error) {
             console.error(`Error in attack for ${socket.id}:`, error);
             socket.emit('error', 'Failed to process attack');
@@ -140,7 +145,7 @@ io.on('connection', (socket) => {
     });
 
     // Handle attack results
-    socket.on('attackResult', async ({ gameID, hit }) => {
+    socket.on('attackResult', async ({ gameID, playerID, hit, x, y }) => {
         try {
             console.log(`Attack result from ${socket.id} in game ${gameID}, hit: ${hit}`);
 
@@ -152,11 +157,8 @@ io.on('connection', (socket) => {
             }
 
             // Notify opponent of the attack result
-            socket.to(gameID).emit('receiveResult', { hit });
+            socket.to(gameID).emit('receiveResult', { hit, playerID, x, y });
 
-            // Switch turn
-            currGame.currentTurn = currGame.currentTurn === 1 ? 2 : 1;
-            await currGame.save();
         } catch (error) {
             console.error(`Error in attackResult for ${socket.id}:`, error);
             socket.emit('error', 'Failed to process attack result');

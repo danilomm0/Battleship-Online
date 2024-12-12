@@ -104,3 +104,29 @@ function wipeGameStatus() {
   sessionStorage.removeItem("gameID");
   sessionStorage.removeItem("playerNumber");
 }
+
+/**
+ * Getting the current gameid
+ * 
+ * @returns the gameID if exists null otherwise
+ */
+function getGameID() {
+  const gameID = sessionStorage.getItem("gameID");
+  if (gameID) {
+    return gameID;
+  }
+  return null;
+}
+
+/**
+ * Getting current players id
+ * 
+ * @returns The playerID if exist null otherwise
+ */
+function getPlayerID() {
+  const playerID = sessionStorage.getItem("gameID");
+  if (playerID) {
+    return playerID;
+  }
+  return null;
+}

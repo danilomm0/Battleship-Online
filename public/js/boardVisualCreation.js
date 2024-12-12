@@ -289,7 +289,10 @@ function start() {
     storeDifficulty();
     storeGameBoard("playerBoard", placedShips);
     let text = d3.select("#lobby-code").text();
-    window.location.href = `/play-game/${text}`;
+    window.globalSocket.emit('placeShips', { gameID: text, playerID: sessionStorage.getItem("playerNumber") });
+    window.globalSocket.on('gameStart', (data) => {
+      window.location.href = `/play-game/${text}`
+    });
   } else {
     storeDifficulty();
     storeGameBoard("playerBoard", placedShips);
