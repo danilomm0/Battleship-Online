@@ -1,4 +1,8 @@
 let username = null;
+const chat = {
+  messages: [],
+  maxMessages: 50,
+};
 
 function load() {
   username = getLoginStatus();
@@ -8,6 +12,7 @@ function load() {
     d3.select("#login").classed("hidden", true);
   }
   wipeGameStatus();
+  loadMessages();
 }
 
 function login() {
@@ -137,3 +142,36 @@ function joinGameAPI(gameID) {
       return false;
     });
 }
+
+function loadMessages() {
+  window.globalSocket.emit('getChatHistory');
+}
+
+function sendMessage() {
+  let message = d3.select("#message").property("value");
+  const chat = d3.select(".messages-container");
+  if (message) {
+    // chat.append("div").text(message);
+    d3.select("#message").property("value", "");
+    const sender = username;
+    window.globalSocket.emit('sendGlobalMsg', { sender, message })
+  }
+}
+
+
+window.globalSocket.on("receiveGlobalMsg", (data) => {
+  const { message } = data;
+  console.log(`MESSAGE RECIEVED: ${message}`);
+  const chat = d3.select(".messages-container");
+  chat.append("div").text(message);
+  chat.scrollTop = chat.scrollHeight;
+});
+
+window.globalSocket.on("chatHistory", (messages) => {
+  console.log(messages);
+  const chat = d3.select(".messages-container");
+  messages.forEach((msg) => {
+    chat.append("div").text(msg.message);
+    chat.scrollTop = chat.scrollHeight;
+  });
+});
