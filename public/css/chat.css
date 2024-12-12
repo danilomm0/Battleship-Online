@@ -1,0 +1,119 @@
+.error {
+  color: red;
+}
+
+.chat-box {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  width: 20rem;
+  background-color: rgb(31, 41, 55);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  background-color: rgb(55, 65, 81);
+  padding: 0.75rem;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-title {
+  color: #ffffff;
+  font-weight: 600;
+  margin: 0;
+}
+
+.messages-container {
+  padding: 0.75rem;
+  height: 20rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+}
+
+.message-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.message-user {
+  color: rgb(96, 165, 250);
+  font-weight: 500;
+}
+
+.message-timestamp {
+  color: rgb(156, 163, 175);
+  font-size: 0.75rem;
+}
+
+.message-text {
+  color: #ffffff;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  max-width: 296px;
+}
+
+.input-container {
+  padding: 0.75rem;
+  background-color: rgb(55, 65, 81);
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input {
+  text-align: left;
+  flex: 1;
+  background-color: rgb(75, 85, 99);
+  color: #ffffff;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  max-width: 225px;
+}
+
+.input:focus {
+  outline: 2px solid rgb(59, 130, 246);
+  outline-offset: -2px;
+}
+
+.input::placeholder {
+  color: rgb(156, 163, 175);
+}
+
+.send {
+  background-color: rgb(59, 130, 246);
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.send:hover {
+  background-color: rgb(37, 99, 235);
+}
