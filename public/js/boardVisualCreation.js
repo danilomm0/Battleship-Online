@@ -3,8 +3,8 @@ const board = createBoard("#playerBoard");
 const urlParams = new URLSearchParams(window.location.search);
 if (parseInt(urlParams.get("difficulty")) === 0) {
   d3.select("#info").classed("hidden", false);
-  const lobbyCode = document.getElementById("lobby-code");
-  lobbyCode.textContent; // TO DO ////////////////////////////////////////////////////
+  const code = document.getElementById("lobby-code");
+  code.textContent = window.location.pathname.split("/").filter(Boolean)[1];
 }
 
 // Initialize ship dock
@@ -272,6 +272,12 @@ function reset() {
   });
   d3.selectAll(".ship-group").remove();
   makeShips();
+}
+
+// Quick Copy button
+function copy() {
+  let text = d3.select("#lobby-code").text();
+  navigator.clipboard.writeText(text);
 }
 
 function start() {

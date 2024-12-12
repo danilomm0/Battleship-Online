@@ -64,9 +64,6 @@ function gameLoop() {
 
   // Update difficulty display
   const difficultyElem = document.getElementById("difficulty");
-  console.log(
-    `${difficultyElem} and ${difficultyElem.textContent} and ${difficulty}`
-  );
   if (difficultyElem) {
     difficultyElem.textContent = DIFFICULTY[difficulty];
   } else {
