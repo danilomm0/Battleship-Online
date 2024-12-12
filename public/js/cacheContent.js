@@ -78,3 +78,29 @@ function getLoginStatus() {
   }
   return null;
 }
+
+/**
+ * writing a given game id
+ * 
+ * @param {UUID} gameID the game id
+ */
+function writeGameID(gameID) {
+  sessionStorage.setItem("gameID", gameID);
+}
+
+/**
+ * Writing a given player id
+ * 
+ * @param {Integer} playerID the players id
+ */
+function writePlayerID(playerID) {
+  sessionStorage.setItem("playerNumber", playerID);
+}
+
+/**
+ * Wiping the current game status 
+ */
+function wipeGameStatus() {
+  sessionStorage.removeItem("gameID");
+  sessionStorage.removeItem("playerNumber");
+}

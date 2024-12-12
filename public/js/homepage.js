@@ -7,6 +7,7 @@ function load() {
         d3.select("#logout").classed("hidden", false);
         d3.select("#login").classed("hidden", true);
     }
+    wipeGameStatus();
 }
 
 function login() {
@@ -44,7 +45,11 @@ function startGame() {
             }
             
             console.log("Game created and joined with ID:", gameID);
-            window.location.href = `/place-ships/${gameID}?difficulty=0`;
+            window.globalSocket.on("playerAssigned", (data) => {
+                writePlayerID(parseInt(data.playerNumber));
+                writeGameID(gameID);
+                window.location.href = `/place-ships/${gameID}?difficulty=0`;
+            });
         })
         .catch((error) => {
             console.error("Game creation process failed:", {
@@ -84,16 +89,16 @@ function createGame() {
         console.log("The newGameID", data.gameID);
         
         // Directly return the gameID if you're not using joinGameAPI
-        return data.gameID;
+        // return data.gameID;
         
         // If you want to keep joinGameAPI, use this:
-        // return joinGameAPI(data.gameID).then((success) => {
-        //     if (success) {
-        //         return data.gameID;
-        //     } else {
-        //         throw new Error("Failed to join the game");
-        //     }
-        // });
+        return joinGameAPI(data.gameID).then((success) => {
+            if (success) {
+                return data.gameID;
+            } else {
+                throw new Error("Failed to join the game");
+            }
+        });
     })
     .catch((error) => {
         console.error("Complete error details:", {
@@ -109,27 +114,35 @@ function joinGame() {
     let code = d3.select("#code").property("value");
     let output = joinGameAPI(code);
     hideError(output);
+    window.globalSocket.on("playerAssigned", (data) => {
+        writePlayerID(parseInt(data.playerNumber));
+        writeGameID(code);
+        window.location.href = `/place-ships/${code}?difficulty=0`;
+    });
 }
+
+
 function hideError(temp) {
     d3.select("#error").classed("hidden", temp);
 }
 
 function joinGameAPI(gameID) {
-    fetch(`/api/gameStatus/${gameID}`, {
+    return fetch(`/api/gameStatus/${gameID}`, {
         method: "POST", // Use POST as specified in your route
     })
-        .then((response) => {
-            if (response.ok) {
-                socket.emit("joinRoom", String(code));
-                return true;
-            } else {
-                console.log("HERE2");
-                console.log("Game not found or some other error.");
-                return false;
-            }
-        })
-        .catch((error) => {
-            console.error("Error making the request:", error);
+    .then((response) => {
+        if (response.ok) {
+            // Note: you have `code` which is not defined. Did you mean `gameID`?
+            console.log("here");
+            window.globalSocket.emit("joinGame", String(gameID));
+            return true;
+        } else {
+            console.log("Game not found or some other error.");
             return false;
-        });
+        }
+    })
+    .catch((error) => {
+        console.error("Error making the request:", error);
+        return false;
+    });
 }

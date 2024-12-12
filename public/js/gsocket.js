@@ -4,7 +4,7 @@ const socket = io();
 socket.on("connect", () => {
     const gameID = sessionStorage.getItem("gameID");
     const playerNumber = sessionStorage.getItem("playerNumber");
-
+    console.log("Included?");
     if (gameID && playerNumber) {
         console.log(`Rejoining game ${gameID} as Player ${playerNumber}`);
         socket.emit("rejoinGame", { gameID, playerNumber });

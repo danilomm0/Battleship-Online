@@ -18,22 +18,22 @@ io.on('connection', (socket) => {
         try {
             console.log(`Client ${socket.id} attempting to rejoin lobby ${gameID} as Player ${playerNumber}`);
             let currGame = await getLobbyById(gameID);
-    
+
             if (!currGame) {
                 socket.emit("error", "Lobby not found");
                 return;
             }
-    
+
             // Ensure the player slot matches the playerNumber
             const playerIndex = playerNumber - 1; // Player 1 maps to index 0
             if (currGame.players[playerIndex] && currGame.players[playerIndex] !== socket.id) {
                 currGame.players[playerIndex] = socket.id; // Update to the new socket ID
                 await currGame.save();
             }
-    
+
             socket.join(gameID);
             console.log(`Player ${playerNumber} (${socket.id}) rejoined game ${gameID}`);
-    
+
             // Send the current game state to the rejoining player
             socket.emit("gameState", { message: "Welcome back to the game!" });
         } catch (error) {
@@ -49,11 +49,13 @@ io.on('connection', (socket) => {
             let currGame = await getLobbyById(gameID);
 
             if (!currGame) {
+                console.log("Lobby is not found");
                 socket.emit("error", "Lobby not found");
                 return;
             }
 
             if (currGame.players.length >= 2) {
+                console.log("Lobby is full");
                 socket.emit("error", "Lobby is full");
                 return;
             }
