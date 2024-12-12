@@ -280,7 +280,23 @@ function reset() {
 // Quick Copy button
 function copy() {
   let text = d3.select("#lobby-code").text();
-  navigator.clipboard.writeText(text);
+
+  // Use a fallback method if Clipboard API is unavailable
+  let textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "absolute"; // Avoid scrolling to the bottom of the page
+  textarea.style.left = "-9999px"; // Hide the textarea
+  document.body.appendChild(textarea);
+  textarea.select();
+
+  try {
+    document.execCommand("copy");
+    console.log("Fallback: Text copied to clipboard!");
+  } catch (err) {
+    console.error("Fallback: Failed to copy text: ", err);
+  }
+
+  document.body.removeChild(textarea);
 }
 
 function start() {
