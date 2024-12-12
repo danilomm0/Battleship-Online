@@ -1,4 +1,8 @@
 let username = null;
+const chat = {
+  messages: [],
+  maxMessages: 50,
+};
 
 function load() {
   username = getLoginStatus();
@@ -8,6 +12,7 @@ function load() {
     d3.select("#login").classed("hidden", true);
   }
   wipeGameStatus();
+  loadMessages();
 }
 
 function login() {
@@ -136,4 +141,16 @@ function joinGameAPI(gameID) {
       console.error("Error making the request:", error);
       return false;
     });
+}
+
+function loadMessages() {}
+
+function sendMessage() {
+  let message = d3.select("#message").property("value");
+  const chat = d3.select(".messages-container");
+  if (message) {
+    chat.append("div").text(message);
+    d3.select("#message").property("value", "");
+    chat.scrollTop = chat.scrollHeight;
+  }
 }

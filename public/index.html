@@ -63,6 +63,18 @@
         </div>
     </div>
 
+    <div class="chat-box">
+        <h3>Global Chat</h3>
+        <div class="messages-container"></div>
+        <div class="error hidden" id="chat-error">Must be logged in to message
+        </div>
+        <div class="input-container">
+            <input type="text" id="message" required
+                placeholder="Type a message...">
+            <button class="button3" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
     <div class="popup hidden" id="popup">
         <button class="button3" id="hide"
             onclick="hidePopup(true)">Back</button>
