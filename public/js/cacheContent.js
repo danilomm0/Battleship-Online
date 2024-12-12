@@ -81,7 +81,7 @@ function getLoginStatus() {
 
 /**
  * writing a given game id
- * 
+ *
  * @param {UUID} gameID the game id
  */
 function writeGameID(gameID) {
@@ -90,7 +90,7 @@ function writeGameID(gameID) {
 
 /**
  * Writing a given player id
- * 
+ *
  * @param {Integer} playerID the players id
  */
 function writePlayerID(playerID) {
@@ -98,7 +98,7 @@ function writePlayerID(playerID) {
 }
 
 /**
- * Wiping the current game status 
+ * Wiping the current game status
  */
 function wipeGameStatus() {
   sessionStorage.removeItem("gameID");
@@ -107,7 +107,7 @@ function wipeGameStatus() {
 
 /**
  * Getting the current gameid
- * 
+ *
  * @returns the gameID if exists null otherwise
  */
 function getGameID() {
@@ -120,11 +120,11 @@ function getGameID() {
 
 /**
  * Getting current players id
- * 
+ *
  * @returns The playerID if exist null otherwise
  */
 function getPlayerID() {
-  const playerID = sessionStorage.getItem("gameID");
+  const playerID = sessionStorage.getItem("playerNumber");
   if (playerID) {
     return playerID;
   }

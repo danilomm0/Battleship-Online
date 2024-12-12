@@ -8,7 +8,6 @@ let enemyShips = null;
 let playerTurn = true;
 let shipVertical = null;
 let heatMap = null;
-
 const gameID = getGameID();
 const playerID = getPlayerID();
 
@@ -85,10 +84,9 @@ function gameLoop() {
       // Handle player's shot
       if (validCoord(x, y, enemyBoard)) {
         console.log(`Shot at (${x},${y})`);
-        window.globalSocket.emit('attack', { gameID, playerID, x, y});
+        window.globalSocket.emit("attack", { gameID, playerID, x, y });
       }
     });
-    
   } else {
     placeRandom();
     enemyShips = placedShips;
@@ -375,16 +373,81 @@ function updateUserStatus(username, status) {
   });
 }
 
-
 window.globalSocket.on("receiveAttack", (data) => {
   const { x, y, recivedPlayerID } = data;
-  if (recivedPlayerID === playerID) {return;}
-  const isaHit = isHit(x,y,playerBoard);
-  window.globalSocket.emit('attackResult', { gameID, playerID, isaHit, x, y });
+  if (recivedPlayerID === playerID) {
+    return;
+  }
+  const isaHit = isHitMultiplayer(x, y);
+  console.log(isaHit);
+  window.globalSocket.emit("attackResult", { gameID, playerID, isaHit });
 });
 
 window.globalSocket.on("receiveResult", (data) => {
-  const { hit, recivedPlayerID, x, y } = data;
-  if (recivedPlayerID !== playerID) {return;}
-
+  const { list, recivedPlayerID } = data;
+  if (recivedPlayerID === playerID) {
+    return;
+  }
+  result = list.at(0);
+  if (result === 2) {
+    for (let i = 1; i < list.length; i = i + 2) {
+      enemyBoard
+        .select(`rect[data-x="${list[i]}"][data-y="${list[i + 1]}"]`)
+        .classed("sunk", true)
+        .classed("hit", false)
+        .classed("ship", false);
+    }
+  } else {
+    const cell = enemyBoard.select(
+      `rect[data-x="${list[2]}"][data-y="${list[2]}"]`
+    );
+    if (result === 0) {
+      cell.classed("miss", true);
+    } else {
+      cell.classed("miss", true);
+    }
+  }
 });
+
+function isHitMultiplayer(x, y) {
+  const cell = playerBoard.select(`rect[data-x="${x}"][data-y="${y}"]`);
+  let list = [0, x, y];
+  playerShips.forEach((shipData, shipName) => {
+    const { cells, vertical } = shipData;
+    cells.forEach(([shipX, shipY]) => {
+      if (shipX === x && shipY === y) {
+        list[0] = 1;
+        cell.classed("hit", true);
+        const ship = playerShips.get(shipName);
+        if (ship) {
+          let allCellsHit = true;
+          ship.cells.forEach(([x, y]) => {
+            const cell = playerBoard.select(
+              `rect[data-x="${x}"][data-y="${y}"]`
+            );
+            let temp = cell.classed("hit");
+            if (!temp) {
+              allCellsHit = false;
+            }
+          });
+          if (allCellsHit) {
+            shipVertical = null;
+            ship.cells.forEach(([x, y]) => {
+              list.push(x);
+              list.push(y);
+              playerBoard
+                .select(`rect[data-x="${x}"][data-y="${y}"]`)
+                .classed("sunk", true)
+                .classed("hit", false)
+                .classed("ship", false);
+            });
+            list[0] = 2;
+            console.log(`Sunk ${shipName} at (${x},${y})`);
+          }
+        }
+      }
+    });
+  });
+  if (list[0] === 0) cell.classed("miss", true);
+  return list;
+}
