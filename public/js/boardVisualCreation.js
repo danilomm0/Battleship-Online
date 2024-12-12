@@ -286,12 +286,17 @@ function copy() {
 function start() {
   const urlParams = new URLSearchParams(window.location.search);
   if (parseInt(urlParams.get("difficulty")) === 0) {
+    d3.select("#popup").classed("hidden", false);
+    d3.selectAll(".button").classed("disable", true);
     storeDifficulty();
     storeGameBoard("playerBoard", placedShips);
     let text = d3.select("#lobby-code").text();
-    window.globalSocket.emit('placeShips', { gameID: text, playerID: sessionStorage.getItem("playerNumber") });
-    window.globalSocket.on('gameStart', (data) => {
-      window.location.href = `/play-game/${text}`
+    window.globalSocket.emit("placeShips", {
+      gameID: text,
+      playerID: sessionStorage.getItem("playerNumber"),
+    });
+    window.globalSocket.on("gameStart", (data) => {
+      window.location.href = `/play-game/${text}`;
     });
   } else {
     storeDifficulty();

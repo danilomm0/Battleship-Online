@@ -157,3 +157,26 @@ img:hover {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 5px;
 }
+
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  border-radius: 15px;
+  padding: 3rem;
+  background: linear-gradient(135deg, #1a2a6c, #2a4858);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+}
+
+.popup-title {
+  font-size: 28px;
+  color: #a8c0ff;
+}
+
+.disable {
+  cursor: not-allowed;
+  pointer-events: none;
+}
