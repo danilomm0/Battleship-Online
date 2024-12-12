@@ -10,9 +10,7 @@ function load() {
     d3.select("#dashboard").classed("hidden", false);
     d3.select("#logout").classed("hidden", false);
     d3.select("#login").classed("hidden", true);
-    d3.select("#chat-error").classed("hidden", true);
-    d3.select("#message").classed("hidden", false);
-    d3.select("#send").classed("hidden", false);
+    allowChat(true);
   }
   wipeGameStatus();
   loadMessages();
@@ -26,9 +24,7 @@ function logout() {
   d3.select("#dashboard").classed("hidden", true);
   d3.select("#logout").classed("hidden", true);
   d3.select("#login").classed("hidden", false);
-  d3.select("#chat-error").classed("hidden", false);
-  d3.select("#message").classed("hidden", true);
-  d3.select("#send").classed("hidden", true);
+  allowChat(false);
   clearLoginStatus();
 }
 
