@@ -1,108 +1,132 @@
-/* Global Styles */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Orbitron', sans-serif; 
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background: linear-gradient(135deg, #1d2b64, #f8cdda); 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    color: #fff;
-    font-size: 16px;
-    background-attachment: fixed;
+  background: linear-gradient(135deg, #1a2a6c, #2a4858);
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 16px;
+  background-attachment: fixed;
 }
 
 h2 {
-    text-align: center;
-    color: #4a90e2;
-    font-size: 30px;
-    margin-bottom: 20px;
+  text-align: center;
+  color: #4a90e2;
+  font-size: 30px;
+  margin-bottom: 20px;
 }
 
 .form-container {
-    background: rgba(0, 0, 0, 0.7); 
-    border-radius: 8px;
-    padding: 40px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
-    text-align: center;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  text-align: center;
 }
 
 .form-field {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .form-field label {
-    display: block;
-    font-size: 14px;
-    margin-bottom: 5px;
-    color: #a8c0ff;
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #a8c0ff;
 }
 
 .form-field input {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 6px;
-    font-size: 18px;
-    background-color: #3b4a69; 
-    color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease-in-out;
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
 }
 
 .form-field input:focus {
-    background-color: #2c3e50; 
-    border: 2px solid #4a90e2;
-    outline: none;
+  background-color: #2c3e50;
+  border: 2px solid #4a90e2;
+  outline: none;
 }
 
 /* Submit Button */
 button {
-    width: 100%;
-    padding: 15px;
-    background-color: #4a90e2; 
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  padding: 15px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 button:hover {
-    background-color: #357abd; 
+  background-color: #357abd;
 }
 
 p {
-    margin-top: 20px;
-    font-size: 16px;
+  margin-top: 20px;
+  font-size: 16px;
 }
 
 p a {
-    color: #4a90e2;
-    text-decoration: none;
-    font-weight: bold;
+  color: #4a90e2;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 p a:hover {
-    text-decoration: underline;
-    font-style: italic;
+  text-decoration: underline;
+  font-style: italic;
 }
 
-
-button, input {
-    font-family: 'Orbitron', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+button,
+input {
+  font-family: "Orbitron", sans-serif;
+  letter-spacing: 1px;
 }
 
+/* Positioning the navigation container */
+.nav-container {
+  position: absolute; /* Absolute positioning relative to the body */
+  top: 20px; /* Space from the top */
+  left: 10px; /* Space from the left */
+}
 
+.back_button {
+  text-decoration: none;
+  border-radius: 25px; /* Rounded corners */
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  border: 2px solid #a8c0ff; /* Light blue border */
+  color: #a8c0ff; /* Light blue text */
+  font-size: 16px; /* Button font size */
+  padding: 8px 20px; /* Padding for a clickable area */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: all 0.3s ease; /* Smooth hover effects */
+}
+
+/* Hover effects for the button */
+.back_button:hover {
+  background: #a8c0ff; /* Light blue background on hover */
+  color: #1a2a6c; /* Darker text color on hover */
+  transform: scale(1.1); /* Slightly enlarge button */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}

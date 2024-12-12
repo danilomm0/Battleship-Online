@@ -1,64 +1,52 @@
-<!-- login-register.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login / Register - Battleship</title>
-    <link rel="stylesheet" href="css/login.css">
+    <title>Login and Account Creation</title>
+    <script src="/js/cacheContent.js"></script>
+    <link rel="stylesheet" href="/css/login.css">
 </head>
+
 <body>
+    <div class="nav-container">
+        <a href="/" class="back_button">&larr; Back to Home</a>
+    </div>
+
     <div class="form-container">
         <h2 id="form-title">Login</h2>
-        <!-- Login Form -->
+
         <div id="login-form" class="form-section">
-            <form action="login_handler.js" method="POST">
+            <form id="loginForm" method="POST">
+                <div id="login-error" class="error-message" style="color: red;">
+                </div>
                 <div class="form-field">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>
                 </div>
-                <div class="form-field">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
                 <button type="submit">Login</button>
             </form>
-            <p>Don't have an account? <a href="#" id="switch-to-register">Register here</a></p>
+            <p>Don't have an account? <a href="#"
+                    id="switch-to-register">Register here</a></p>
         </div>
 
-        <!-- Registration Form  -->
         <div id="register-form" class="form-section" style="display: none;">
-            <form action="register_handler.js" method="POST">
+            <form id="registerForm" method="POST">
+                <div id="register-error" class="error-message"
+                    style="color: red;"></div>
                 <div class="form-field">
                     <label for="new-username">Username:</label>
-                    <input type="text" id="new-username" name="username" required>
-                </div>
-                <div class="form-field">
-                    <label for="new-password">Password:</label>
-                    <input type="password" id="new-password" name="password" required>
-                </div>
-                <div class="form-field">
-                    <label for="confirm-password">Confirm Password:</label>
-                    <input type="password" id="confirm-password" name="confirm-password" required>
+                    <input type="text" id="new-username" name="username"
+                        required>
                 </div>
                 <button type="submit">Register</button>
             </form>
-            <p>Already have an account? <a href="#" id="switch-to-login">Login here</a></p>
+            <p>Already have an account? <a href="#" id="switch-to-login">Login
+                    here</a></p>
         </div>
     </div>
-
-    <script>
-        document.getElementById('switch-to-register').addEventListener('click', function() {
-            document.getElementById('form-title').textContent = 'Register';
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('register-form').style.display = 'block';
-        });
-
-        document.getElementById('switch-to-login').addEventListener('click', function() {
-            document.getElementById('form-title').textContent = 'Login';
-            document.getElementById('login-form').style.display = 'block';
-            document.getElementById('register-form').style.display = 'none';
-        });
-    </script>
+    <script src="/js/login.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,122 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #1a2a6c, #2a4858);
+  height: 100vh;
+  width: 100vw;
+  color: white;
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  padding: 16px;
+}
+
+.title {
+  font-size: 56px;
+  margin-bottom: 16px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+.nav {
+  position: absolute;
+  top: 20px;
+  left: 10px;
+}
+
+.back_button {
+  text-decoration: none;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid #a8c0ff;
+  color: #a8c0ff;
+  font-size: 16px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back_button:hover {
+  background: #a8c0ff;
+  color: #1a2a6c;
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.account {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.profile-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.profile-title {
+  font-size: 2.5rem;
+  color: #a8c0ff;
+  margin-bottom: 1rem;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.container {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.container h2 {
+  color: #a8c0ff;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.grid {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 250px));
+  gap: 2rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1.5rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.card h3 {
+  color: #a8c0ff;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.card h4 {
+  color: #a8c0ff;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.achievement-desc {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battleship</title>
+    <link rel="stylesheet" href="/css/placeShips.css">
+    <script src="/js/d3.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="/js/gsocket.js"></script>
+    <script src="/js/boardCreation.js"></script>
+    <script src="/js/cacheContent.js"></script>
+</head>
+
+<body>
+    <div class="game-container">
+        <header class="header">
+            <h1 class="title">BATTLESHIP</h1>
+            <div class="game-info hidden" id="info">
+                Lobby Code: <span id="lobby-code">null</span>
+                <img src="/images/copy.png" onclick="copy()">
+            </div>
+        </header>
+
+        <div class="main">
+            <h1 id="gameMessage" class="game-message">
+                Place your ships!
+            </h1>
+
+            <div class="ship-placement" id="shipPlacement">
+                <div class="ships-list">
+                    <h3 class="game-message">Press R to rotate ship</h3>
+                    <div id="ship-dock"></div>
+                    <div class="controls">
+                        <button class="button" onclick="placeRandom()">Place
+                            Randomly</button>
+                        <button class="button" onclick="reset()">Reset</button>
+                    </div>
+                </div>
+                <div class="board">
+                    <h2 class="board-title">Your Board</h2>
+                    <div class="grid" id="playerBoard"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="button hidden" id="startGame" onclick="start()">Start
+                Game</button>
+        </div>
+    </div>
+    <div class="popup hidden" id="popup">
+        <h2 class="popup-title">Waiting for other player</h2>
+    </div>
+    <script src="/js/boardVisualCreation.js"></script>
+</body>
+
+</html>

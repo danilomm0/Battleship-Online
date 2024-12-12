@@ -1,0 +1,183 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #1a2a6c, #2a4858);
+  height: 100vh;
+  width: 100vw;
+  color: white;
+  padding: 2rem;
+}
+
+.game-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2rem;
+  color: #a8c0ff;
+}
+
+.game-info {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+}
+
+.main {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.game-message {
+  text-align: center;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.ship-placement {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex;
+  gap: 3rem;
+}
+
+.ships-list {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 1rem;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 15px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.button:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.board {
+  gap: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 1rem;
+  margin: 1rem;
+}
+
+.board-title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.grid {
+  display: grid;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px;
+  border-radius: 5px;
+  backdrop-filter: blur(10px);
+}
+
+.cell {
+  fill: rgba(255, 255, 255, 0);
+  stroke: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.ship {
+  fill: #4caf50;
+}
+
+.ship.dragging {
+  opacity: 0;
+}
+
+.ship.placed {
+  fill: #4caf50;
+  stroke: rgba(255, 255, 255, 0);
+}
+
+.hover {
+  fill: #4caf50;
+}
+
+.invalid {
+  fill: rgba(244, 67, 54, 0.3);
+}
+
+.hidden {
+  display: none;
+}
+
+img {
+  width: 20px;
+  height: 20px;
+}
+
+img:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  border-radius: 15px;
+  padding: 3rem;
+  background: linear-gradient(135deg, #1a2a6c, #2a4858);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+}
+
+.popup-title {
+  font-size: 28px;
+  color: #a8c0ff;
+}
+
+.disable {
+  cursor: not-allowed;
+  pointer-events: none;
+}
