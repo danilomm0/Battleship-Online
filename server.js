@@ -16,6 +16,7 @@ io.on("connection", (socket) => {
   console.log(`Client connected: ${socket.id}`);
 
   socket.on('getChatHistory', () => {
+    console.log("Requesting message history.")
     GlobalChat.find({})
       .sort({ timestamp: -1 })
       .limit(50)
@@ -25,11 +26,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on('sendGlobalMsg', async (data) => {
-    const { sender, msg } = data;
-    const newMsg = new GlobalChat({ sender, msg });
+    const { sender, message } = data;
+    const newMsg = new GlobalChat({ sender, message });
     await newMsg.save()
 
-    socket.emit('receiveGlobalMsg', newMsg)
+    console.log(`Recieved message ${message} from sender ${sender}`);
+
+    io.emit('receiveGlobalMsg', { message })
   });
 
   socket.on("rejoinGame", async ({ gameID, playerNumber }) => {

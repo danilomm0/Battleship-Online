@@ -143,14 +143,35 @@ function joinGameAPI(gameID) {
     });
 }
 
-function loadMessages() {}
+function loadMessages() {
+  window.globalSocket.emit('getChatHistory');
+}
 
 function sendMessage() {
   let message = d3.select("#message").property("value");
   const chat = d3.select(".messages-container");
   if (message) {
-    chat.append("div").text(message);
+    // chat.append("div").text(message);
     d3.select("#message").property("value", "");
-    chat.scrollTop = chat.scrollHeight;
+    const sender = username;
+    window.globalSocket.emit('sendGlobalMsg', { sender, message })
   }
 }
+
+
+window.globalSocket.on("receiveGlobalMsg", (data) => {
+  const { message } = data;
+  console.log(`MESSAGE RECIEVED: ${message}`);
+  const chat = d3.select(".messages-container");
+  chat.append("div").text(message);
+  chat.scrollTop = chat.scrollHeight;
+});
+
+window.globalSocket.on("chatHistory", (messages) => {
+  console.log(messages);
+  const chat = d3.select(".messages-container");
+  messages.forEach((msg) => {
+    chat.append("div").text(msg.message);
+    chat.scrollTop = chat.scrollHeight;
+  });
+});
