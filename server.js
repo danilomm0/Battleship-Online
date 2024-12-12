@@ -4,7 +4,7 @@ const socketIo = require("socket.io"); // scockets
 const connectDB = require("./config/database"); // MongoDB connection function
 const { getLobbyById } = require("./routes/middleware/fetchData.js");
 const Lobby = require("./models/GameStatus.js");
-const GlobalChat = require("./models/Chat.js")
+const GlobalChat = require("./models/Chat.js");
 // dbconnection
 connectDB();
 
@@ -15,24 +15,24 @@ const io = socketIo(server);
 io.on("connection", (socket) => {
   console.log(`Client connected: ${socket.id}`);
 
-  socket.on('getChatHistory', () => {
-    console.log("Requesting message history.")
+  socket.on("getChatHistory", () => {
+    console.log("Requesting message history.");
     GlobalChat.find({})
       .sort({ timestamp: -1 })
       .limit(50)
       .then((messages) => {
-        socket.emit('chatHistory', messages.reverse()); 
+        socket.emit("chatHistory", messages.reverse());
       });
   });
 
-  socket.on('sendGlobalMsg', async (data) => {
+  socket.on("sendGlobalMsg", async (data) => {
     const { sender, message } = data;
     const newMsg = new GlobalChat({ sender, message });
-    await newMsg.save()
+    await newMsg.save();
 
     console.log(`Recieved message ${message} from sender ${sender}`);
 
-    io.emit('receiveGlobalMsg', { message })
+    io.emit("receiveGlobalMsg", { message });
   });
 
   socket.on("rejoinGame", async ({ gameID, playerNumber }) => {

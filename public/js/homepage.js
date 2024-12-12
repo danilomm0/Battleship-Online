@@ -144,26 +144,33 @@ function joinGameAPI(gameID) {
 }
 
 function loadMessages() {
-  window.globalSocket.emit('getChatHistory');
+  window.globalSocket.emit("getChatHistory");
 }
 
 function sendMessage() {
   let message = d3.select("#message").property("value");
   const chat = d3.select(".messages-container");
   if (message) {
-    // chat.append("div").text(message);
     d3.select("#message").property("value", "");
     const sender = username;
-    window.globalSocket.emit('sendGlobalMsg', { sender, message })
+    window.globalSocket.emit("sendGlobalMsg", { sender, message });
   }
 }
-
 
 window.globalSocket.on("receiveGlobalMsg", (data) => {
   const { message } = data;
   console.log(`MESSAGE RECIEVED: ${message}`);
   const chat = d3.select(".messages-container");
-  chat.append("div").text(message);
+  chat.append("div").html(
+    <div className="message">
+      <div className="message-header">
+        <span className="message-user">{message.user}</span>
+        <span className="message-timestamp">{message.timestamp}</span>
+      </div>
+      <p className="message-text">{message.text}</p>
+    </div>
+  );
+
   chat.scrollTop = chat.scrollHeight;
 });
 
