@@ -20,6 +20,15 @@ function sendMessage() {
   }
 }
 
+function minimize() {
+  let text = d3.select("#minimize").text();
+  let temp = text === "-" ? true : false;
+  if (temp) d3.select("#minimize").text("+");
+  if (!temp) d3.select("#minimize").text("-");
+  d3.select(".messages-container").classed("hidden", temp);
+  d3.select(".input-container").classed("hidden", temp);
+}
+
 window.globalSocket.on("receiveGlobalMsg", (message) => {
   console.log(`MESSAGE RECIEVED: ${message}`);
   const chat = d3.select(".messages-container");
