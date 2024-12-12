@@ -32,7 +32,7 @@ io.on("connection", (socket) => {
 
     console.log(`Recieved message ${message} from sender ${sender}`);
 
-    io.emit("receiveGlobalMsg", { message });
+    io.emit("receiveGlobalMsg", newMsg);
   });
 
   socket.on("rejoinGame", async ({ gameID, playerNumber }) => {

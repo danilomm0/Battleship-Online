@@ -68,13 +68,14 @@
             <h3 class="chat-title">Global Chat</h3>
         </div>
         <div class="messages-container"></div>
-        <div class="input-container hidden" id="chat-error">
-            <div class="error">Must be logged in to message</div>
-        </div>
-        <div class="input-container" id="no-error">
-            <input type="text" class="input" id="message" required
+        <div class="input-container">
+            <div class="error" id="chat-error">Must be logged in to
+                message
+            </div>
+            <input type="text" class="input hidden" id="message" required
                 placeholder="Type a message...">
-            <button class="send" onclick="sendMessage()">Send</button>
+            <button class="send hidden" id="send"
+                onclick="sendMessage()">Send</button>
         </div>
     </div>
 

@@ -10,6 +10,9 @@ function load() {
     d3.select("#dashboard").classed("hidden", false);
     d3.select("#logout").classed("hidden", false);
     d3.select("#login").classed("hidden", true);
+    d3.select("#chat-error").classed("hidden", true);
+    d3.select("#message").classed("hidden", false);
+    d3.select("#send").classed("hidden", false);
   }
   wipeGameStatus();
   loadMessages();
@@ -23,6 +26,9 @@ function logout() {
   d3.select("#dashboard").classed("hidden", true);
   d3.select("#logout").classed("hidden", true);
   d3.select("#login").classed("hidden", false);
+  d3.select("#chat-error").classed("hidden", false);
+  d3.select("#message").classed("hidden", true);
+  d3.select("#send").classed("hidden", true);
   clearLoginStatus();
 }
 
@@ -157,28 +163,34 @@ function sendMessage() {
   }
 }
 
-window.globalSocket.on("receiveGlobalMsg", (data) => {
-  const { message } = data;
+window.globalSocket.on("receiveGlobalMsg", (message) => {
   console.log(`MESSAGE RECIEVED: ${message}`);
   const chat = d3.select(".messages-container");
-  chat.append("div").html(
-    <div className="message">
-      <div className="message-header">
-        <span className="message-user">{message.user}</span>
-        <span className="message-timestamp">{message.timestamp}</span>
+  chat.append("div").attr("class", "message").html(`
+      <div class="message-header">
+        <span class="message-user">${message.sender}</span>
+        <span class="message-timestamp">${new Date(
+          message.timestamp
+        ).toLocaleTimeString()}</span>
       </div>
-      <p className="message-text">{message.text}</p>
-    </div>
-  );
-
-  chat.scrollTop = chat.scrollHeight;
+      <p class="message-text">${message.message}</p>`);
+  const chatContainer = document.querySelector(".messages-container");
+  chatContainer.scrollTop = chatContainer.scrollHeight;
 });
 
 window.globalSocket.on("chatHistory", (messages) => {
   console.log(messages);
   const chat = d3.select(".messages-container");
   messages.forEach((msg) => {
-    chat.append("div").text(msg.message);
-    chat.scrollTop = chat.scrollHeight;
+    chat.append("div").attr("class", "message").html(`
+      <div class="message-header">
+        <span class="message-user">${msg.sender}</span>
+        <span class="message-timestamp">${new Date(
+          msg.timestamp
+        ).toLocaleTimeString()}</span>
+      </div>
+      <p class="message-text">${msg.message}</p>`);
   });
+  const chatContainer = document.querySelector(".messages-container");
+  chatContainer.scrollTop = chatContainer.scrollHeight;
 });
