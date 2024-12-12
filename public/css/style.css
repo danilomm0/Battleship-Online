@@ -100,7 +100,7 @@ body {
 .button2,
 .button3 {
   border-radius: 25px;
-  background: rgba(255, 196, 3, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   border: 2px solid #a8c0ff;
   color: #a8c0ff;
   cursor: pointer;
