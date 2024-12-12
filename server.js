@@ -141,7 +141,7 @@ io.on("connection", (socket) => {
       }
 
       console.log(
-        `Attack from ${socket.id} in game ${gameID} at coords (${x}, ${y})`
+        `Attack from ${socket.id} in game ${gameID} at coords (${x}, ${y}) by player ${playerID}`
       );
 
       // Switch turn
@@ -149,7 +149,8 @@ io.on("connection", (socket) => {
       await currGame.save();
 
       // Send attack to the opponent
-      socket.to(gameID).emit("receiveAttack", { x, y, playerID });
+      const recivedPlayerID = playerID;
+      socket.to(gameID).emit("receiveAttack", { x, y, recivedPlayerID });
     } catch (error) {
       console.error(`Error in attack for ${socket.id}:`, error);
       socket.emit("error", "Failed to process attack");
@@ -159,7 +160,6 @@ io.on("connection", (socket) => {
   // Handle attack results
   socket.on("attackResult", async ({ gameID, playerID, list }) => {
     try {
-      console.log(list);
       console.log(`Attack result from ${socket.id} in game ${gameID}`);
 
       let currGame = await getLobbyById(gameID);
@@ -170,7 +170,8 @@ io.on("connection", (socket) => {
       }
 
       // Notify opponent of the attack result
-      socket.to(gameID).emit("receiveResult", { list, playerID });
+      const recivedPlayerID = playerID;
+      socket.to(gameID).emit("receiveResult", { list, recivedPlayerID });
     } catch (error) {
       console.error(`Error in attackResult for ${socket.id}:`, error);
       socket.emit("error", "Failed to process attack result");

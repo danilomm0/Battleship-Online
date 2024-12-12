@@ -83,6 +83,8 @@ function gameLoop() {
 
       // Handle player's shot
       if (validCoord(x, y, enemyBoard)) {
+        gameOver(playerBoard);
+        gameOver(enemyBoard);
         console.log(`Shot at (${x},${y})`);
         window.globalSocket.emit("attack", { gameID, playerID, x, y });
       }
@@ -374,21 +376,24 @@ function updateUserStatus(username, status) {
 }
 
 window.globalSocket.on("receiveAttack", (data) => {
-  const { x, y, recivedPlayerID } = data;
+  let { x, y, recivedPlayerID } = data;
   if (recivedPlayerID === playerID) {
     return;
   }
-  const isaHit = isHitMultiplayer(x, y);
-  console.log(isaHit);
-  window.globalSocket.emit("attackResult", { gameID, playerID, isaHit });
+  turnElem.textContent = parseInt(turnElem.textContent) + 1;
+  const list = isHitMultiplayer(x, y);
+  gameOver(playerBoard);
+  gameOver(enemyBoard);
+  window.globalSocket.emit("attackResult", { gameID, playerID, list });
 });
 
 window.globalSocket.on("receiveResult", (data) => {
+  turnElem.textContent = parseInt(turnElem.textContent) + 1;
   const { list, recivedPlayerID } = data;
   if (recivedPlayerID === playerID) {
     return;
   }
-  result = list.at(0);
+  result = list[0];
   if (result === 2) {
     for (let i = 1; i < list.length; i = i + 2) {
       enemyBoard
@@ -399,14 +404,16 @@ window.globalSocket.on("receiveResult", (data) => {
     }
   } else {
     const cell = enemyBoard.select(
-      `rect[data-x="${list[2]}"][data-y="${list[2]}"]`
+      `rect[data-x="${list[1]}"][data-y="${list[2]}"]`
     );
     if (result === 0) {
       cell.classed("miss", true);
     } else {
-      cell.classed("miss", true);
+      cell.classed("hit", true);
     }
   }
+  gameOver(playerBoard);
+  gameOver(enemyBoard);
 });
 
 function isHitMultiplayer(x, y) {
