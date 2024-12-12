@@ -4,9 +4,26 @@
 function storeDifficulty() {
   // url params
   const urlParams = new URLSearchParams(window.location.search);
+  console.log(urlParams.get("difficulty"));
   const difficulty = urlParams.get("difficulty");
   // store in session cache
   sessionStorage.setItem("gameDifficulty", difficulty);
+}
+
+/**
+ * Getting current game difficulty from session storage
+ *
+ * @returns Int -> the game difficulty
+ */
+function retrieveDifficulty() {
+  const difficulty = sessionStorage.getItem("gameDifficulty");
+  if (difficulty !== null) {
+    return difficulty;
+  }
+  console.error(
+    "Couldnt get the difficulty from session storage :( Returning max difficulty!"
+  );
+  return 4;
 }
 
 /**
@@ -18,23 +35,6 @@ function storeDifficulty() {
 function storeGameBoard(type, board) {
   // store board in the session
   sessionStorage.setItem(type, JSON.stringify(Array.from(board)));
-}
-
-/**
- * Getting current game difficulty from session storage
- *
- * @returns Int -> the game difficulty
- */
-function retrieveDifficulty() {
-  const difficulty = sessionStorage.getItem("gameDifficulty");
-  console.log(difficulty);
-  if (difficulty) {
-    return difficulty;
-  }
-  console.error(
-    "Couldnt get the difficulty from session storage :( Returning max difficulty!"
-  );
-  return 4;
 }
 
 /**

@@ -1,6 +1,7 @@
 const board = createBoard("#playerBoard");
-storeDifficulty();
-if (retrieveDifficulty() === 0) {
+
+const urlParams = new URLSearchParams(window.location.search);
+if (parseInt(urlParams.get("difficulty")) === 0) {
   d3.select("#info").classed("hidden", false);
   const lobbyCode = document.getElementById("lobby-code");
   lobbyCode.textContent; // TO DO ////////////////////////////////////////////////////
