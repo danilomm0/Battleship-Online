@@ -205,7 +205,7 @@ io.on("connection", (socket) => {
   });
 });
 
-PORT = 3000; // comment out after other items are uncommented
+PORT = 5000; // comment out after other items are uncommented
 
 // Start listening for incoming requests
 server.listen(PORT, () => {
