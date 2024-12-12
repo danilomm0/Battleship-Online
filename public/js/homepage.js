@@ -169,9 +169,8 @@ window.globalSocket.on("receiveGlobalMsg", (message) => {
   chat.append("div").attr("class", "message").html(`
       <div class="message-header">
         <span class="message-user">${message.sender}</span>
-        <span class="message-timestamp">${new Date(
-          message.timestamp
-        ).toLocaleTimeString()}</span>
+        <span class="message-timestamp">${new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }</span>
       </div>
       <p class="message-text">${message.message}</p>`);
   const chatContainer = document.querySelector(".messages-container");
@@ -185,9 +184,8 @@ window.globalSocket.on("chatHistory", (messages) => {
     chat.append("div").attr("class", "message").html(`
       <div class="message-header">
         <span class="message-user">${msg.sender}</span>
-        <span class="message-timestamp">${new Date(
-          msg.timestamp
-        ).toLocaleTimeString()}</span>
+        <span class="message-timestamp">${new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }</span>
       </div>
       <p class="message-text">${msg.message}</p>`);
   });
