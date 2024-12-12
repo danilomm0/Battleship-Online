@@ -284,7 +284,15 @@ function copy() {
 }
 
 function start() {
-  storeDifficulty();
-  storeGameBoard("playerBoard", placedShips);
-  window.location.href = "/play-game";
+  const urlParams = new URLSearchParams(window.location.search);
+  if (parseInt(urlParams.get("difficulty")) === 0) {
+    storeDifficulty();
+    storeGameBoard("playerBoard", placedShips);
+    let text = d3.select("#lobby-code").text();
+    window.location.href = `/play-game/${text}`;
+  } else {
+    storeDifficulty();
+    storeGameBoard("playerBoard", placedShips);
+    window.location.href = "/play-game";
+  }
 }
