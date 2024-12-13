@@ -13,7 +13,6 @@ function load() {
     allowChat(true);
   }
   wipeGameStatus();
-  loadMessages();
 }
 
 function login() {

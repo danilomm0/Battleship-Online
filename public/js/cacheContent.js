@@ -73,6 +73,7 @@ function clearLoginStatus() {
  */
 function getLoginStatus() {
   const username = sessionStorage.getItem("battleShipLogin");
+  console.log(`Am i logged in? ${username}`)
   if (username) {
     return username;
   }

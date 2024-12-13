@@ -12,7 +12,7 @@ function loadMessages() {
 
 function sendMessage() {
   let message = d3.select("#message").property("value");
-  const chat = d3.select(".messages-container");
+  const chat = d3.select(".messages-container");akk
   if (message) {
     d3.select("#message").property("value", "");
     const sender = username;
@@ -66,3 +66,8 @@ window.globalSocket.on("chatHistory", (messages) => {
   const chatContainer = document.querySelector(".messages-container");
   chatContainer.scrollTop = chatContainer.scrollHeight;
 });
+
+loadMessages();
+if (username) {
+    allowChat(true);
+}

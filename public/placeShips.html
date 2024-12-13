@@ -6,11 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship</title>
     <link rel="stylesheet" href="/css/placeShips.css">
+    <link rel="stylesheet" href="css/chat.css">
     <script src="/js/d3.js"></script>
+    <script src="/js/cacheContent.js"></script>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="/js/gsocket.js"></script>
+    <script src="/js/globalChat.js"></script>
     <script src="/js/boardCreation.js"></script>
-    <script src="/js/cacheContent.js"></script>
 </head>
 
 <body>
@@ -50,6 +52,25 @@
                 Game</button>
         </div>
     </div>
+
+    <div class="chat-box">
+        <div class="chat-header">
+            <h3 class="chat-title">Global Chat</h3>
+            <button class="minimize" id="minimize"
+                onclick="minimize()">-</button>
+        </div>
+        <div class="messages-container"></div>
+        <div class="input-container">
+            <div class="error" id="chat-error">Must be logged in to
+                message
+            </div>
+            <input type="text" class="input hidden" id="message" required
+                placeholder="Type a message...">
+            <button class="send hidden" id="send"
+                onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
     <div class="popup hidden" id="popup">
         <h2 class="popup-title">Waiting for other player</h2>
     </div>
