@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship</title>
     <link rel="stylesheet" href="/css/placeShips.css">
-    <link rel="stylesheet" href="css/chat.css">
+    <link rel="stylesheet" href="/css/chat.css">
     <script src="/js/d3.js"></script>
     <script src="/js/cacheContent.js"></script>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
@@ -15,7 +15,7 @@
     <script src="/js/boardCreation.js"></script>
 </head>
 
-<body>
+<body onload="loadMessages()">
     <div class="game-container">
         <header class="header">
             <h1 class="title">BATTLESHIP</h1>

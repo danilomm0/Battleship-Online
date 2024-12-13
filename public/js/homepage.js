@@ -10,9 +10,9 @@ function load() {
     d3.select("#dashboard").classed("hidden", false);
     d3.select("#logout").classed("hidden", false);
     d3.select("#login").classed("hidden", true);
-    allowChat(true);
   }
   wipeGameStatus();
+  loadMessages();
 }
 
 function login() {

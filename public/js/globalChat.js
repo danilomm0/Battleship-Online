@@ -8,11 +8,12 @@ function allowChat(temp) {
 
 function loadMessages() {
   window.globalSocket.emit("getChatHistory");
+  if (username) allowChat(true);
 }
 
 function sendMessage() {
   let message = d3.select("#message").property("value");
-  const chat = d3.select(".messages-container");akk
+  const chat = d3.select(".messages-container");
   if (message) {
     d3.select("#message").property("value", "");
     const sender = username;
@@ -66,8 +67,3 @@ window.globalSocket.on("chatHistory", (messages) => {
   const chatContainer = document.querySelector(".messages-container");
   chatContainer.scrollTop = chatContainer.scrollHeight;
 });
-
-loadMessages();
-if (username) {
-    allowChat(true);
-}
