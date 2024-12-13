@@ -8,6 +8,9 @@ function allowChat(temp) {
 
 function loadMessages() {
   window.globalSocket.emit("getChatHistory");
+  const min = getChatBoxState();
+  console.log(`MIN STATUS ${min}`);
+  if (min) minimize();
   if (username) allowChat(true);
 }
 
@@ -28,6 +31,7 @@ function minimize() {
   if (!temp) d3.select("#minimize").text("-");
   d3.select(".messages-container").classed("hidden", temp);
   d3.select(".input-container").classed("hidden", temp);
+  setChatBoxState(temp);
 }
 
 window.globalSocket.on("receiveGlobalMsg", (message) => {

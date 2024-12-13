@@ -131,3 +131,20 @@ function getPlayerID() {
   }
   return null;
 }
+
+/**
+ * Setting chatbox state if minimized or not
+ * 
+ * @param {Int} min 1 if maximized 0 minimized
+ */
+function setChatBoxState(min) {
+  sessionStorage.setItem("CBState", min)
+}
+
+function getChatBoxState() {
+  const state = sessionStorage.getItem("CBState");
+  if (state) {
+    return true;
+  }
+  return false;
+}
