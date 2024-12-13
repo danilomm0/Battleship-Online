@@ -73,7 +73,7 @@ function clearLoginStatus() {
  */
 function getLoginStatus() {
   const username = sessionStorage.getItem("battleShipLogin");
-  console.log(`Am i logged in? ${username}`)
+  console.log(`Am i logged in? ${username}`);
   if (username) {
     return username;
   }
@@ -133,18 +133,19 @@ function getPlayerID() {
 }
 
 /**
- * Setting chatbox state if minimized or not
- * 
- * @param {Int} min 1 if maximized 0 minimized
+ * Sets the chat box state
+ *
+ * @param {boolean} min true if maximized false otherwise
  */
 function setChatBoxState(min) {
-  sessionStorage.setItem("CBState", min)
+  sessionStorage.setItem("CBState", min);
 }
 
+/**
+ *
+ * @returns chat box state
+ */
 function getChatBoxState() {
   const state = sessionStorage.getItem("CBState");
-  if (state) {
-    return true;
-  }
-  return false;
+  return state;
 }
