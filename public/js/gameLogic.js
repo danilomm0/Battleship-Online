@@ -75,14 +75,15 @@ function gameLoop() {
   // click handlers for ai board
   if (difficulty === "0") {
     // multiplayer
-    console.log("multiplayer!");
-
+    if (parseInt(getPlayerID()) === 2)
+      d3.select("#turn-msg").text("Opponents Turn");
     enemyBoard.selectAll("rect").on("click", function () {
       let x = parseInt(d3.select(this).attr("data-x"));
       let y = parseInt(d3.select(this).attr("data-y"));
 
       // handle the players shot
       if (validCoord(x, y, enemyBoard)) {
+        d3.select("#turn-msg").text("Opponents Turn");
         gameOver(playerBoard);
         gameOver(enemyBoard);
         console.log(`Shot at (${x},${y})`);
@@ -381,6 +382,7 @@ window.globalSocket.on("receiveAttack", (data) => {
     return;
   }
   turnElem.textContent = parseInt(turnElem.textContent) + 1;
+  d3.select("#turn-msg").text("Your Turn");
   const list = isHitMultiplayer(x, y);
   gameOver(playerBoard);
   gameOver(enemyBoard);
@@ -389,12 +391,6 @@ window.globalSocket.on("receiveAttack", (data) => {
 
 window.globalSocket.on("receiveResult", (data) => {
   turnElem.textContent = parseInt(turnElem.textContent) + 1;
-  if (parseInt(turnElem.textContent) % 2 == getPlayerID() % 2) {
-    d3.select("#turn-msg").text("Your Turn");
-  } else {
-    d3.select("#turn-msg").text("Opponents Turn");
-  }
-
   const { list, recivedPlayerID } = data;
   if (recivedPlayerID === playerID) {
     return;
