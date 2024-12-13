@@ -75,8 +75,7 @@ function gameLoop() {
   // click handlers for ai board
   if (difficulty === "0") {
     // multiplayer
-    if (parseInt(getPlayerID()) === 2)
-      d3.select("#turn-msg").text("Opponents Turn");
+    if (parseInt(playerID) === 2) d3.select("#turn-msg").text("Opponents Turn");
     enemyBoard.selectAll("rect").on("click", function () {
       let x = parseInt(d3.select(this).attr("data-x"));
       let y = parseInt(d3.select(this).attr("data-y"));
