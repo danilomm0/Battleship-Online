@@ -48,12 +48,12 @@ io.on("connection", (socket) => {
   socket.on("rejoinGame", async ({ gameID, playerNumber }) => {
     try {
       console.log(
-        `Client ${socket.id} attempting to rejoin lobby ${gameID} as Player ${playerNumber}`
+        `Client ${socket.id} attempting to rejoin lobby ${gameID} as player ${playerNumber}`
       );
       let currGame = await getLobbyById(gameID);
 
       if (!currGame) {
-        socket.emit("error", "Lobby not found");
+        console.log("Curr game not found")
         return;
       }
 
@@ -72,10 +72,9 @@ io.on("connection", (socket) => {
       );
 
       // Send the current game state to the rejoining player
-      socket.emit("gameState", { message: "Welcome back to the game!" });
+      socket.emit("gameState", { message: "Rejoined gamestate" });
     } catch (error) {
       console.error(`Error in rejoinGame for ${socket.id}:`, error);
-      socket.emit("error", "Failed to rejoin the game");
     }
   });
 
@@ -87,13 +86,11 @@ io.on("connection", (socket) => {
 
       if (!currGame) {
         console.log("Lobby is not found");
-        socket.emit("error", "Lobby not found");
         return;
       }
 
       if (currGame.players.length >= 2) {
         console.log("Lobby is full");
-        socket.emit("error", "Lobby is full");
         return;
       }
 
@@ -118,7 +115,6 @@ io.on("connection", (socket) => {
       }
     } catch (error) {
       console.error(`Error in joinGame for ${socket.id}:`, error);
-      socket.emit("error", "Failed to join the game");
     }
   });
 
@@ -131,7 +127,6 @@ io.on("connection", (socket) => {
         socket.emit("error", "Lobby not found");
         return;
       }
-      console.log(`fuck going on here: ${playerID}`);
 
       // mark this player as ready
       currGame.players[playerID - 1] = socket.id;
@@ -140,11 +135,10 @@ io.on("connection", (socket) => {
       console.log(currGame);
       // check if both players are ready
       if (currGame.ready.every((status) => status)) {
-        io.to(gameID).emit("gameStart", { message: "Game is starting!" });
+        io.to(gameID).emit("gameStart", { message: "Game starting" });
       }
     } catch (error) {
       console.error(`Error in placeShips for ${socket.id}:`, error);
-      socket.emit("error", "Failed to place ships");
     }
   });
 
@@ -155,7 +149,7 @@ io.on("connection", (socket) => {
       let currGame = await getLobbyById(gameID);
 
       if (!currGame) {
-        socket.emit("error", "Lobby not found");
+        console.log("lobby not found");
         return;
       }
 
@@ -165,8 +159,7 @@ io.on("connection", (socket) => {
       }
 
       if (playerID !== currGame.currentTurn) {
-        console.log("Not this players turn!");
-        socket.emit("error", "Not your turn");
+        console.log("not this players turn");
         return;
       }
 
@@ -182,7 +175,6 @@ io.on("connection", (socket) => {
       socket.to(gameID).emit("receiveAttack", { x, y, recivedPlayerID });
     } catch (error) {
       console.error(`Error in attack for ${socket.id}:`, error);
-      socket.emit("error", "Failed to process attack");
     }
   });
 
@@ -203,7 +195,6 @@ io.on("connection", (socket) => {
       socket.to(gameID).emit("receiveResult", { list, recivedPlayerID });
     } catch (error) {
       console.error(`Error in attackResult for ${socket.id}:`, error);
-      socket.emit("error", "Failed to process attack result");
     }
   });
 

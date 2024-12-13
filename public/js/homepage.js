@@ -47,7 +47,7 @@ function startGame() {
   createGame()
     .then((gameID) => {
       if (!gameID) {
-        throw new Error("Invalid game ID");
+        console.error("Invalid gameID");
       }
 
       console.log("Game created and joined with ID:", gameID);
@@ -65,7 +65,7 @@ function startGame() {
       });
 
       alert(
-        `Game creation failed: ${error.message}. Please try again or check your connection.`
+        `Game creation failed: ${error.message} Critical Error`
       );
     });
 }
@@ -81,7 +81,7 @@ function createGame() {
       console.log("Response ok:", response.ok);
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        console.error(`http error oh no: ${response.status}`)
       }
 
       return response.json();
@@ -89,14 +89,14 @@ function createGame() {
     .then((data) => {
       console.log("Received data:", data);
       if (!data || !data.gameID) {
-        throw new Error("No game ID received");
+        console.error("Didnt get a gameID back");
       }
       console.log("The newGameID", data.gameID);
       return joinGameAPI(data.gameID).then((success) => {
         if (success) {
           return data.gameID;
         } else {
-          throw new Error("Failed to join the game");
+          console.error("fail to join game");
         }
       });
     })
@@ -134,7 +134,7 @@ function joinGameAPI(gameID) {
         window.globalSocket.emit("joinGame", String(gameID));
         return true;
       } else {
-        console.log("Game not found or some other error.");
+        console.error("Game not found or some other error.");
         return false;
       }
     })

@@ -9,7 +9,6 @@ function allowChat(temp) {
 function loadMessages() {
   window.globalSocket.emit("getChatHistory");
   const min = getChatBoxState();
-  console.log(`MIN STATUS ${min}`);
   if (min) minimize();
   if (username) allowChat(true);
 }

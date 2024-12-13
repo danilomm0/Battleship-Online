@@ -72,7 +72,7 @@ function gameLoop() {
     console.error("Invalid difficulty level");
   }
 
-  // Add click handlers for ai board
+  // click handlers for ai board
   if (difficulty === "0") {
     // multiplayer
     console.log("multiplayer!");
@@ -81,7 +81,7 @@ function gameLoop() {
       let x = parseInt(d3.select(this).attr("data-x"));
       let y = parseInt(d3.select(this).attr("data-y"));
 
-      // Handle player's shot
+      // handle the players shot
       if (validCoord(x, y, enemyBoard)) {
         gameOver(playerBoard);
         gameOver(enemyBoard);
@@ -99,7 +99,7 @@ function gameLoop() {
       if (!playerTurn) {
         return;
       }
-      // Handle player's shot
+      // handle players shot
       if (validCoord(x, y, enemyBoard)) {
         playerTurn = false;
         let temp = isHit(x, y, enemyBoard);
@@ -113,7 +113,7 @@ function gameLoop() {
 
 function replaceShips(board, ships) {
   if (!ships) {
-    console.error("No ships found in local storage");
+    console.error("No ships found in session storage");
     return;
   }
 
