@@ -1,40 +1,50 @@
 const http = require("http");
 const app = require("./app");
-const socketIo = require("socket.io"); // scockets
-const connectDB = require("./config/database"); // MongoDB connection function
+const socketIo = require("socket.io");
+const connectDB = require("./config/database"); 
 const { getLobbyById } = require("./routes/middleware/fetchData.js");
 const Lobby = require("./models/GameStatus.js");
 const GlobalChat = require("./models/Chat.js");
 // dbconnection
 connectDB();
-
-// Create an HTTP server
+// http server and sio server
 const server = http.createServer(app);
 const io = socketIo(server);
 
 io.on("connection", (socket) => {
   console.log(`Client connected: ${socket.id}`);
 
+  // getting 50 most recent chat items.
   socket.on("getChatHistory", () => {
-    console.log("Requesting message history.");
-    GlobalChat.find({})
-      .sort({ timestamp: -1 })
-      .limit(50)
-      .then((messages) => {
-        socket.emit("chatHistory", messages.reverse());
-      });
+    try {
+      console.log("Requesting message history.");
+      GlobalChat.find({})
+        .sort({ timestamp: -1 })
+        .limit(50)
+        .then((messages) => {
+          socket.emit("chatHistory", messages.reverse());
+        });
+    } catch (error) {
+      console.log(`Error getting chat history ${error}`)
+    }
   });
 
+  // sending a message to the global chat
   socket.on("sendGlobalMsg", async (data) => {
-    const { sender, message } = data;
-    const newMsg = new GlobalChat({ sender, message });
-    await newMsg.save();
+    try {
+      const { sender, message } = data;
+      const newMsg = new GlobalChat({ sender, message });
+      await newMsg.save();
 
-    console.log(`Recieved message ${message} from sender ${sender}`);
+      console.log(`Recieved message ${message} from sender ${sender}`);
 
-    io.emit("receiveGlobalMsg", newMsg);
+      io.emit("receiveGlobalMsg", newMsg);
+    } catch (error) {
+      console.log(`Error sending global message ${error}`)
+    }
   });
 
+  // rejoining a game room from when you reload the page
   socket.on("rejoinGame", async ({ gameID, playerNumber }) => {
     try {
       console.log(
@@ -47,13 +57,12 @@ io.on("connection", (socket) => {
         return;
       }
 
-      // Ensure the player slot matches the playerNumber
-      const playerIndex = playerNumber - 1; // Player 1 maps to index 0
+      const playerIndex = playerNumber - 1;
       if (
         currGame.players[playerIndex] &&
         currGame.players[playerIndex] !== socket.id
       ) {
-        currGame.players[playerIndex] = socket.id; // Update to the new socket ID
+        currGame.players[playerIndex] = socket.id; 
         await currGame.save();
       }
 
@@ -70,7 +79,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Handle joining a game
+  // joining a game
   socket.on("joinGame", async (gameID) => {
     try {
       console.log(`Client ${socket.id} attempting to join lobby ${gameID}`);
@@ -113,23 +122,23 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Handle placing ships
+  // handle placing ships being ready
   socket.on("placeShips", async ({ gameID, playerID }) => {
     try {
       let currGame = await getLobbyById(gameID);
-      console.log(`${gameID} finished placing shits!`);
+      console.log(`${gameID} finished placing ships!`);
       if (!currGame) {
         socket.emit("error", "Lobby not found");
         return;
       }
       console.log(`fuck going on here: ${playerID}`);
 
-      // Mark this player as ready
+      // mark this player as ready
       currGame.players[playerID - 1] = socket.id;
       currGame.ready[playerID - 1] = true;
       await currGame.save();
       console.log(currGame);
-      // Check if both players are ready
+      // check if both players are ready
       if (currGame.ready.every((status) => status)) {
         io.to(gameID).emit("gameStart", { message: "Game is starting!" });
       }
@@ -139,7 +148,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Handle attacks
+  // handle incoming attacks
   socket.on("attack", async ({ gameID, playerID, x, y }) => {
     try {
       playerID = parseInt(playerID);
@@ -165,11 +174,10 @@ io.on("connection", (socket) => {
         `Attack from ${socket.id} in game ${gameID} at coords (${x}, ${y}) by player ${playerID}`
       );
 
-      // Switch turn
       currGame.currentTurn = currGame.currentTurn === 1 ? 2 : 1;
       await currGame.save();
 
-      // Send attack to the opponent
+      // sending attack over socket for opponent
       const recivedPlayerID = playerID;
       socket.to(gameID).emit("receiveAttack", { x, y, recivedPlayerID });
     } catch (error) {
@@ -178,7 +186,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Handle attack results
+  // handle attack results
   socket.on("attackResult", async ({ gameID, playerID, list }) => {
     try {
       console.log(`Attack result from ${socket.id} in game ${gameID}`);
@@ -190,7 +198,7 @@ io.on("connection", (socket) => {
         return;
       }
 
-      // Notify opponent of the attack result
+      // tell other person back what was the result of this attack
       const recivedPlayerID = playerID;
       socket.to(gameID).emit("receiveResult", { list, recivedPlayerID });
     } catch (error) {
@@ -199,13 +207,13 @@ io.on("connection", (socket) => {
     }
   });
 
-  // Handle player disconnection
+  // socket disconnect
   socket.on("disconnect", () => {
     console.log(`Client disconnected: ${socket.id}`);
   });
 });
 
-PORT = 5000; // comment out after other items are uncommented
+PORT = 5000;
 
 // Start listening for incoming requests
 server.listen(PORT, () => {
