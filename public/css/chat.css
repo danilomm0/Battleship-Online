@@ -133,3 +133,16 @@
   display: none;
   visibility: hidden;
 }
+
+.messages-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+  background: rgb(75, 85, 99);
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+  background: rgb(107, 114, 128);
+  border-radius: 3px;
+}
