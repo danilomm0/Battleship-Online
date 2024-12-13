@@ -149,6 +149,9 @@ body {
   left: 32px;
   width: 56px;
   height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .hidden {
@@ -202,8 +205,4 @@ input {
 .popup-title {
   font-size: 28px;
   color: #a8c0ff;
-}
-
-.error {
-  color: red;
 }

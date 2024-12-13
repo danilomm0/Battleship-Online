@@ -18,7 +18,7 @@ body {
   padding: 20px;
 }
 
-.help-container {
+.helpWrapper {
   background: rgba(0, 0, 0, 0.8);
   border-radius: 10px;
   padding: 40px;
@@ -29,7 +29,6 @@ body {
   text-align: left;
 }
 
-/* Headings */
 h1 {
   color: #4a90e2;
   font-size: 36px;
@@ -43,7 +42,7 @@ h2 {
   margin-bottom: 10px;
 }
 
-.section {
+.helpSection {
   margin-bottom: 40px;
 }
 
@@ -90,13 +89,13 @@ footer p {
   margin-bottom: 0;
 }
 
-.nav-container {
+.back_button {
   position: absolute;
   top: 20px;
-  left: 10px;
+  left: 0;
 }
 
-.back_button {
+.backButton {
   text-decoration: none;
   border-radius: 25px;
   background: rgba(255, 255, 255, 0.1);
@@ -108,7 +107,7 @@ footer p {
   transition: all 0.3s ease;
 }
 
-.back_button:hover {
+.backButton:hover {
   background: #a8c0ff;
   color: #1a2a6c;
   transform: scale(1.1);

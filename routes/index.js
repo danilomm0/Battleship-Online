@@ -121,4 +121,9 @@ router.get("/api/account/:username", async (req, res) => {
     }
 });
 
+router.use((req, res) => {
+    res.sendFile(path.join(__dirname, "../public/404.html"));
+});
+
+
 module.exports = router;
