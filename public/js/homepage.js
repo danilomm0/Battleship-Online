@@ -64,14 +64,11 @@ function startGame() {
         stack: error.stack,
       });
 
-      alert(
-        `Game creation failed: ${error.message} Critical Error`
-      );
+      alert(`Game creation failed: ${error.message} Critical Error`);
     });
 }
 
 function createGame() {
-  console.log("Called now");
   return fetch("/api/createLobby", {
     method: "POST",
   })
@@ -81,7 +78,7 @@ function createGame() {
       console.log("Response ok:", response.ok);
 
       if (!response.ok) {
-        console.error(`http error oh no: ${response.status}`)
+        console.error(`http error oh no: ${response.status}`);
       }
 
       return response.json();

@@ -79,8 +79,7 @@ function gameLoop() {
     enemyBoard.selectAll("rect").on("click", function () {
       let x = parseInt(d3.select(this).attr("data-x"));
       let y = parseInt(d3.select(this).attr("data-y"));
-
-      // handle the players shot
+      // handle players shot
       if (validCoord(x, y, enemyBoard)) {
         d3.select("#turn-msg").text("Opponents Turn");
         gameOver(playerBoard);
@@ -172,7 +171,6 @@ function enemyShot(dif) {
 }
 
 function validCoord(x, y, board) {
-  console.log(`Checking if (${x},${y}) is a valid coordinate`);
   if (x >= 0 && x < 10 && y >= 0 && y < 10) {
     const cell = board.select(`rect[data-x="${x}"][data-y="${y}"]`);
     if (

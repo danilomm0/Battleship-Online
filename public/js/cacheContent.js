@@ -4,7 +4,6 @@
 function storeDifficulty() {
   // url params
   const urlParams = new URLSearchParams(window.location.search);
-  console.log(urlParams.get("difficulty"));
   const difficulty = urlParams.get("difficulty");
   // store in session cache
   sessionStorage.setItem("gameDifficulty", difficulty);
@@ -73,7 +72,6 @@ function clearLoginStatus() {
  */
 function getLoginStatus() {
   const username = sessionStorage.getItem("battleShipLogin");
-  console.log(`Am i logged in? ${username}`);
   if (username) {
     return username;
   }

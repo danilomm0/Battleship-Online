@@ -282,7 +282,7 @@ function copy() {
   // need to use this weird method since http regular copy doesnt work.
   let textarea = document.createElement("textarea");
   textarea.value = text;
-  textarea.style.position = "absolute"; // dont scroll to that part of page 
+  textarea.style.position = "absolute"; // dont scroll to that part of page
   textarea.style.left = "-999999999999px"; // hiding this text area
   document.body.appendChild(textarea);
   textarea.select();

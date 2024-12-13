@@ -1,7 +1,7 @@
 const http = require("http");
 const app = require("./app");
 const socketIo = require("socket.io");
-const connectDB = require("./config/database"); 
+const connectDB = require("./config/database");
 const { getLobbyById } = require("./routes/middleware/fetchData.js");
 const Lobby = require("./models/GameStatus.js");
 const GlobalChat = require("./models/Chat.js");
@@ -17,7 +17,6 @@ io.on("connection", (socket) => {
   // getting 50 most recent chat items.
   socket.on("getChatHistory", () => {
     try {
-      console.log("Requesting message history.");
       GlobalChat.find({})
         .sort({ timestamp: -1 })
         .limit(50)
@@ -25,7 +24,7 @@ io.on("connection", (socket) => {
           socket.emit("chatHistory", messages.reverse());
         });
     } catch (error) {
-      console.log(`Error getting chat history ${error}`)
+      console.log(`Error getting chat history ${error}`);
     }
   });
 
@@ -35,12 +34,10 @@ io.on("connection", (socket) => {
       const { sender, message } = data;
       const newMsg = new GlobalChat({ sender, message });
       await newMsg.save();
-
       console.log(`Recieved message ${message} from sender ${sender}`);
-
       io.emit("receiveGlobalMsg", newMsg);
     } catch (error) {
-      console.log(`Error sending global message ${error}`)
+      console.log(`Error sending global message ${error}`);
     }
   });
 
@@ -51,21 +48,18 @@ io.on("connection", (socket) => {
         `Client ${socket.id} attempting to rejoin lobby ${gameID} as player ${playerNumber}`
       );
       let currGame = await getLobbyById(gameID);
-
       if (!currGame) {
-        console.log("Curr game not found")
+        console.log("Curr game not found");
         return;
       }
-
       const playerIndex = playerNumber - 1;
       if (
         currGame.players[playerIndex] &&
         currGame.players[playerIndex] !== socket.id
       ) {
-        currGame.players[playerIndex] = socket.id; 
+        currGame.players[playerIndex] = socket.id;
         await currGame.save();
       }
-
       socket.join(gameID);
       console.log(
         `Player ${playerNumber} (${socket.id}) rejoined game ${gameID}`
