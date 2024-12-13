@@ -389,6 +389,12 @@ window.globalSocket.on("receiveAttack", (data) => {
 
 window.globalSocket.on("receiveResult", (data) => {
   turnElem.textContent = parseInt(turnElem.textContent) + 1;
+  if (parseInt(turnElem.textContent) % 2 == getPlayerID() % 2) {
+    d3.select("#turn-msg").text("Your Turn");
+  } else {
+    d3.select("#turn-msg").text("Opponents Turn");
+  }
+
   const { list, recivedPlayerID } = data;
   if (recivedPlayerID === playerID) {
     return;
