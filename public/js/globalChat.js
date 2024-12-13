@@ -37,14 +37,18 @@ window.globalSocket.on("receiveGlobalMsg", (message) => {
         <div class="message-header">
           <span class="message-user">${message.sender}</span>
           <span class="message-timestamp">${new Date(
-            message.timestamp
-          ).toLocaleTimeString([], {
-            hour: "numeric",
-            minute: "2-digit",
-          })}</span>
+    message.timestamp
+  ).toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+  })}</span>
         </div>
         <p class="message-text">${message.message}</p>`);
   const chatContainer = document.querySelector(".messages-container");
+  const messages = chatContainer.querySelectorAll(".message");
+  if (messages.length > 50) {
+    messages[0].remove();
+  }
   chatContainer.scrollTop = chatContainer.scrollHeight;
 });
 
@@ -56,14 +60,26 @@ window.globalSocket.on("chatHistory", (messages) => {
         <div class="message-header">
           <span class="message-user">${msg.sender}</span>
           <span class="message-timestamp">${new Date(
-            msg.timestamp
-          ).toLocaleTimeString([], {
-            hour: "numeric",
-            minute: "2-digit",
-          })}</span>
+      msg.timestamp
+    ).toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    })}</span>
         </div>
         <p class="message-text">${msg.message}</p>`);
   });
   const chatContainer = document.querySelector(".messages-container");
   chatContainer.scrollTop = chatContainer.scrollHeight;
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const messageInput = document.getElementById('message');
+  const sendButton = document.getElementById('send');
+  messageInput.addEventListener('keypress', function (event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      sendButton.click();
+    }
+  });
 });

@@ -17,11 +17,9 @@
 
 <body onload="load()">
     <div class="nav-container">
-        <button class="button2 hidden" id="dashboard"
-            onclick="dashboard()">Dashboard</button>
+        <button class="button2 hidden" id="dashboard" onclick="dashboard()">Dashboard</button>
         <button class="button2" id="login" onclick="login()">Login</button>
-        <button class="button2 hidden" id="logout"
-            onclick="logout()">Logout</button>
+        <button class="button2 hidden" id="logout" onclick="logout()">Logout</button>
     </div>
 
     <div class="header">
@@ -38,8 +36,7 @@
                 </form>
                 <form action="/place-ships" method="GET">
                     <input type="hidden" name="difficulty" value="2">
-                    <button class="button" type="submit"
-                        id="medium">Medium</button>
+                    <button class="button" type="submit" id="medium">Medium</button>
                 </form>
                 <form action="/place-ships" method="GET">
                     <input type="hidden" name="difficulty" value="3">
@@ -47,8 +44,7 @@
                 </form>
                 <form action="/place-ships" method="GET">
                     <input type="hidden" name="difficulty" value="4">
-                    <button class="button" type="submit"
-                        id="impossible">Impossible</button>
+                    <button class="button" type="submit" id="impossible">Impossible</button>
                 </form>
             </div>
         </div>
@@ -68,37 +64,31 @@
     <div class="chat-box">
         <div class="chat-header">
             <h3 class="chat-title">Global Chat</h3>
-            <button class="minimize" id="minimize"
-                onclick="minimize()">-</button>
+            <button class="minimize" id="minimize" onclick="minimize()">-</button>
         </div>
         <div class="messages-container"></div>
         <div class="input-container">
             <div class="error" id="chat-error">Must be logged in to
                 message
             </div>
-            <input type="text" class="input hidden" id="message" required
-                placeholder="Type a message...">
-            <button class="send hidden" id="send"
-                onclick="sendMessage()">Send</button>
+            <input type="text" class="input hidden" id="message" required placeholder="Type a message...">
+            <button class="send hidden" id="send" onclick="sendMessage()">Send</button>
         </div>
     </div>
 
     <div class="popup hidden" id="popup">
-        <button class="button3" id="hide"
-            onclick="hidePopup(true)">Back</button>
+        <button class="button3" id="hide" onclick="hidePopup(true)">Back</button>
         <div class="content">
             <h2 class="popup-title">Join Lobby</h2>
             <div class="error hidden" id="error">Lobby not found</div>
-            <input type="text" id="code" required placeholder="Enter Code Here"
-                onkeydown="hideError(true)" onpaste="hideError(true)"
-                oncut="hideError(true)">
+            <input type="text" id="code" required placeholder="Enter Code Here" onkeydown="hideError(true)"
+                onpaste="hideError(true)" oncut="hideError(true)">
             <button class="button3" id="enter" onclick="joinGame()">Join
                 Game</button>
         </div>
     </div>
 
-    <button class="button2" id="help"
-        onclick="window.location.href='/help'">?</button>
+    <button class="button2" id="help" onclick="window.location.href='/help'">?</button>
 </body>
 
 </html>
