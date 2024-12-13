@@ -1,4 +1,4 @@
-// Switch forms between login and register
+// the code for context switching since both create and login on same html
 document
   .getElementById("switch-to-register")
   .addEventListener("click", function () {
@@ -15,11 +15,11 @@ document
     document.getElementById("register-form").style.display = "none";
   });
 
-// Handle login form submission
+// thandle login
 document
   .getElementById("loginForm")
   .addEventListener("submit", async function (event) {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault(); // dont want empty forms
 
     const formData = new FormData(this);
     const response = await fetch("/login", {
@@ -32,9 +32,9 @@ document
     const errorContainer = document.getElementById("login-error");
 
     if (response.ok) {
-      // Extract the username from the server response
+      // get username from result
       const username = result.user.username;
-      // Redirect to the dashboard with the username in the URL
+      // redirect to accnt and store in cache
       writeLoginStatus(username)
       window.location.href = `/account/${encodeURIComponent(username)}`;
       
@@ -44,11 +44,11 @@ document
     }
   });
 
-// Handle register form submission
+// register new account
 document
   .getElementById("registerForm")
   .addEventListener("submit", async function (event) {
-    event.preventDefault(); // Prevent the default form submission
+    event.preventDefault(); // no default (empty) submissions
 
     const formData = new FormData(this);
     const response = await fetch("/register", {
@@ -61,7 +61,7 @@ document
     const errorContainer = document.getElementById("register-error");
 
     if (response.ok) {
-      // Redirect on success
+      // on sucess prompt to login then
       window.location.href = "/login";
     } else {
       // Show error message
