@@ -1,5 +1,4 @@
 "# CSC337-Final-Project-FW24"
 
-## Some features
-
-- Cannot create another lobby for around a minute after creating a lobby.
+- Back button in browser causes issue with sockets if in multiplayer please dont use.
+- https://www.mongodb.com/try/download/community
