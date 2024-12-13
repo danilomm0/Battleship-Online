@@ -277,23 +277,20 @@ function reset() {
   makeShips();
 }
 
-// Quick Copy button
 function copy() {
   let text = d3.select("#lobby-code").text();
-
-  // Use a fallback method if Clipboard API is unavailable
+  // need to use this weird method since http regular copy doesnt work.
   let textarea = document.createElement("textarea");
   textarea.value = text;
-  textarea.style.position = "absolute"; // Avoid scrolling to the bottom of the page
-  textarea.style.left = "-9999px"; // Hide the textarea
+  textarea.style.position = "absolute"; // dont scroll to that part of page
+  textarea.style.left = "-999999999999px"; // hiding this text area
   document.body.appendChild(textarea);
   textarea.select();
 
   try {
     document.execCommand("copy");
-    console.log("Fallback: Text copied to clipboard!");
   } catch (err) {
-    console.error("Fallback: Failed to copy text: ", err);
+    console.error("Couldnt copt to clipboard", err);
   }
 
   document.body.removeChild(textarea);

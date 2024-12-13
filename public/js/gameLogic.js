@@ -72,17 +72,16 @@ function gameLoop() {
     console.error("Invalid difficulty level");
   }
 
-  // Add click handlers for ai board
+  // click handlers for ai board
   if (difficulty === "0") {
     // multiplayer
-    console.log("multiplayer!");
-
+    if (parseInt(playerID) === 2) d3.select("#turn-msg").text("Opponents Turn");
     enemyBoard.selectAll("rect").on("click", function () {
       let x = parseInt(d3.select(this).attr("data-x"));
       let y = parseInt(d3.select(this).attr("data-y"));
-
-      // Handle player's shot
+      // handle players shot
       if (validCoord(x, y, enemyBoard)) {
+        d3.select("#turn-msg").text("Opponents Turn");
         gameOver(playerBoard);
         gameOver(enemyBoard);
         console.log(`Shot at (${x},${y})`);
@@ -99,7 +98,7 @@ function gameLoop() {
       if (!playerTurn) {
         return;
       }
-      // Handle player's shot
+      // handle players shot
       if (validCoord(x, y, enemyBoard)) {
         playerTurn = false;
         let temp = isHit(x, y, enemyBoard);
@@ -113,7 +112,7 @@ function gameLoop() {
 
 function replaceShips(board, ships) {
   if (!ships) {
-    console.error("No ships found in local storage");
+    console.error("No ships found in session storage");
     return;
   }
 
@@ -172,7 +171,6 @@ function enemyShot(dif) {
 }
 
 function validCoord(x, y, board) {
-  console.log(`Checking if (${x},${y}) is a valid coordinate`);
   if (x >= 0 && x < 10 && y >= 0 && y < 10) {
     const cell = board.select(`rect[data-x="${x}"][data-y="${y}"]`);
     if (
@@ -381,6 +379,7 @@ window.globalSocket.on("receiveAttack", (data) => {
     return;
   }
   turnElem.textContent = parseInt(turnElem.textContent) + 1;
+  d3.select("#turn-msg").text("Your Turn");
   const list = isHitMultiplayer(x, y);
   gameOver(playerBoard);
   gameOver(enemyBoard);

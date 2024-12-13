@@ -105,25 +105,29 @@ input {
 
 .nav-container {
   position: absolute;
-  top: 20px; 
-  left: 10px; 
+  top: 20px;
+  left: 10px;
 }
 
 .back_button {
   text-decoration: none;
   border-radius: 25px;
-  background: rgba(255, 255, 255, 0.1); 
-  border: 2px solid #a8c0ff; 
-  color: #a8c0ff; 
-  font-size: 16px; 
-  padding: 8px 20px; 
-  cursor: pointer; 
-  transition: all 0.3s ease; 
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid #a8c0ff;
+  color: #a8c0ff;
+  font-size: 16px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .back_button:hover {
-  background: #a8c0ff; 
-  color: #1a2a6c; 
-  transform: scale(1.1); 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+  background: #a8c0ff;
+  color: #1a2a6c;
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.error-message {
+  color: red;
 }

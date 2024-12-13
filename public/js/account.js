@@ -1,6 +1,6 @@
-// Fetch data from URL and API
+// get data from out api
 window.onload = async () => {
-  // Extract username from the URL path
+  // get username from path
   const urlSegments = window.location.pathname.split("/");
   const username = urlSegments[urlSegments.length - 1];
   try {
@@ -38,7 +38,7 @@ window.onload = async () => {
       }
       if (achievements === 0) d3.select("#none").classed("hidden", false);
     } else {
-      window.location.href = '/'
+      window.location.href = "/";
       console.error("Failed to fetch user stats.");
     }
   } catch (err) {

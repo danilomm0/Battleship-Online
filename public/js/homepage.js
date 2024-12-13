@@ -47,7 +47,7 @@ function startGame() {
   createGame()
     .then((gameID) => {
       if (!gameID) {
-        throw new Error("Invalid game ID");
+        console.error("Invalid gameID");
       }
 
       console.log("Game created and joined with ID:", gameID);
@@ -64,14 +64,11 @@ function startGame() {
         stack: error.stack,
       });
 
-      alert(
-        `Game creation failed: ${error.message}. Please try again or check your connection.`
-      );
+      alert(`Game creation failed: ${error.message} Critical Error`);
     });
 }
 
 function createGame() {
-  console.log("Called now");
   return fetch("/api/createLobby", {
     method: "POST",
   })
@@ -81,7 +78,7 @@ function createGame() {
       console.log("Response ok:", response.ok);
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        console.error(`http error oh no: ${response.status}`);
       }
 
       return response.json();
@@ -89,14 +86,14 @@ function createGame() {
     .then((data) => {
       console.log("Received data:", data);
       if (!data || !data.gameID) {
-        throw new Error("No game ID received");
+        console.error("Didnt get a gameID back");
       }
       console.log("The newGameID", data.gameID);
       return joinGameAPI(data.gameID).then((success) => {
         if (success) {
           return data.gameID;
         } else {
-          throw new Error("Failed to join the game");
+          console.error("fail to join game");
         }
       });
     })
@@ -134,7 +131,7 @@ function joinGameAPI(gameID) {
         window.globalSocket.emit("joinGame", String(gameID));
         return true;
       } else {
-        console.log("Game not found or some other error.");
+        console.error("Game not found or some other error.");
         return false;
       }
     })
@@ -143,47 +140,3 @@ function joinGameAPI(gameID) {
       return false;
     });
 }
-
-// function loadMessages() {
-//   window.globalSocket.emit("getChatHistory");
-// }
-
-// function sendMessage() {
-//   let message = d3.select("#message").property("value");
-//   const chat = d3.select(".messages-container");
-//   if (message) {
-//     d3.select("#message").property("value", "");
-//     const sender = username;
-//     window.globalSocket.emit("sendGlobalMsg", { sender, message });
-//   }
-// }
-
-// window.globalSocket.on("receiveGlobalMsg", (message) => {
-//   console.log(`MESSAGE RECIEVED: ${message}`);
-//   const chat = d3.select(".messages-container");
-//   chat.append("div").attr("class", "message").html(`
-//       <div class="message-header">
-//         <span class="message-user">${message.sender}</span>
-//         <span class="message-timestamp">${new Date(msg.timestamp).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
-//     }</span>
-//       </div>
-//       <p class="message-text">${message.message}</p>`);
-//   const chatContainer = document.querySelector(".messages-container");
-//   chatContainer.scrollTop = chatContainer.scrollHeight;
-// });
-
-// window.globalSocket.on("chatHistory", (messages) => {
-//   console.log(messages);
-//   const chat = d3.select(".messages-container");
-//   messages.forEach((msg) => {
-//     chat.append("div").attr("class", "message").html(`
-//       <div class="message-header">
-//         <span class="message-user">${msg.sender}</span>
-//         <span class="message-timestamp">${new Date(msg.timestamp).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
-//       }</span>
-//       </div>
-//       <p class="message-text">${msg.message}</p>`);
-//   });
-//   const chatContainer = document.querySelector(".messages-container");
-//   chatContainer.scrollTop = chatContainer.scrollHeight;
-// });

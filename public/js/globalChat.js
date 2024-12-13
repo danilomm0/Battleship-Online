@@ -9,7 +9,6 @@ function allowChat(temp) {
 function loadMessages() {
   window.globalSocket.emit("getChatHistory");
   const min = getChatBoxState();
-  console.log(`MIN STATUS ${min}`);
   if (min) minimize();
   if (username) allowChat(true);
 }
@@ -35,7 +34,6 @@ function minimize() {
 }
 
 window.globalSocket.on("receiveGlobalMsg", (message) => {
-  console.log(`MESSAGE RECIEVED: ${message}`);
   const chat = d3.select(".messages-container");
   chat.append("div").attr("class", "message").html(`
         <div class="message-header">
@@ -57,7 +55,6 @@ window.globalSocket.on("receiveGlobalMsg", (message) => {
 });
 
 window.globalSocket.on("chatHistory", (messages) => {
-  console.log(messages);
   const chat = d3.select(".messages-container");
   messages.forEach((msg) => {
     chat.append("div").attr("class", "message").html(`
