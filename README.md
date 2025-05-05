@@ -1,6 +1,8 @@
-"# CSC337-Final-Project-FW24"
+Final Project for CSC 337
 
-- Back button in browser causes issue with sockets if in multiplayer please dont use.
-- https://www.mongodb.com/try/download/community
-- Dont play against the same account your logged into in multiplayer.
-- All testing was done on chrome. Please use chrome.
+All testing for this project was done using Chrome.
+https://www.mongodb.com/try/download/community
+
+Known Issues:
+- Several things stop working if you log in multiple times and play against yourself in multiplayer.
+- Back button in browser causes issues with sockets while in multiplayer.
